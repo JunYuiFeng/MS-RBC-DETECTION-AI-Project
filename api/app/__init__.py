@@ -1,8 +1,6 @@
 from flask import Blueprint
 from flask_restx import Api
 
-# from .main.controller.user_controller import api as user_ns
-# from .main.controller.auth_controller import api as auth_ns
 from .main.controller.status_controller import api as status_ns
 
 blueprint = Blueprint('api', __name__)
@@ -23,7 +21,4 @@ api = Api(
   security='apikey'
 )
 
-
-# api.add_namespace(user_ns, path='/user')
-# api.add_namespace(auth_ns)
 api.add_namespace(status_ns, path='/status')
