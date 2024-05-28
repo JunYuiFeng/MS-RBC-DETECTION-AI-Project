@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Login',
     component: () => import('../views/LoginView.vue')
   },
+  {
+    path: '/compare',
+    name: 'Compare',
+    component: () => import('../views/CompareView.vue')
+  }
 ]
 
 const router = createRouter({
