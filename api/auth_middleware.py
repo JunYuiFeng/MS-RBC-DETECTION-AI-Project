@@ -42,12 +42,3 @@ def jwt_required(f):
       }, 500 # server error
     return f(current_user, *args, **kwargs)
   return decorated
-
-
-def deco(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        print("decorated")
-        return f(*args, **kwargs)
-    return decorated_function   
-        
