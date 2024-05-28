@@ -1,0 +1,6 @@
+Flask
+flask-restx
+torch
+Pillow
+numpy
+ultralytics
