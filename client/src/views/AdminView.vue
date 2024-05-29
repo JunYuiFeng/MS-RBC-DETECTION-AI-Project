@@ -21,6 +21,8 @@
                     <tr v-for="(item, index) in items" :key="index">
                         <td class="p-3">{{ item.email }}</td>
                         <td class="p-3">{{ item.username }}</td>
+                        <td class="p-3">{{ item.password }}</td>
+                            
                         <div class="flex justify-end gap-5 pt-3 pb-3">
                             <button
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-indigo-950 text-sm rounded-xl">Edit User
@@ -40,12 +42,12 @@
 <script setup lang="ts">
 import NavBar from '/src/components/NavBar.vue'
 
-const headers = ['Email', 'Username']
+const headers = ['Email', 'Username', 'Password']
 const items = [
-    { email: 'gmail.com', username: 'Jason' },
-    { email: 'yahoo.com', username: 'Jun' },
-    { email: 'hotmail.com', username: 'Sahib' },
-    { email: 'outlook.com', username: 'Yvan' },
+    { email: 'gmail.com', username: 'Jason', password: 'secret123' },
+    { email: 'yahoo.com', username: 'Jun', password: 'secret123' },
+    { email: 'hotmail.com', username: 'Sahib', password: 'secret123' },
+    { email: 'outlook.com', username: 'Yvan', password: 'secret123' },
 ];
 
 
