@@ -42,12 +42,11 @@ class auth_login(Resource):
         }
       user = auth_service.login(data["email"], data["passwd"])
       
-      key = 'jwt'
       if user:
             try:
               user["token"] = jwt.encode(
                 {"id": user["id"]}, 
-                key, 
+                current_app.config["SECRET_KEY"], 
                 algorithm="HS256").decode()
               return {
                 "message": "succesfully fetched authentication token",
