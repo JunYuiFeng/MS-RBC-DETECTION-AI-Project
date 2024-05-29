@@ -66,5 +66,5 @@ class auth_login(Resource):
         return {
                 "message": "Something went wrong!",
                 "error": str(e),
-                "data": user
+                "data": None
         }, 500
