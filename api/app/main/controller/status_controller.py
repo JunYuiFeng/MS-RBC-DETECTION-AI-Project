@@ -1,4 +1,4 @@
-from auth_middleware import jwt_required
+from app.auth_middleware import jwt_required
 from db import query_db
 from flask import request
 from flask_restx import Resource

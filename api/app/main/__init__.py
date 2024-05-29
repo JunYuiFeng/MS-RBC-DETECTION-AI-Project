@@ -4,7 +4,7 @@ from flask import Flask
 from db import init_db
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY') or 'this is a secret'
+SECRET_KEY = 'DefaultSigningKey'
 def create_app() -> Flask:
   app = Flask(__name__)
   app.config['SECRET_KEY'] = SECRET_KEY

@@ -2,7 +2,7 @@ from db import query_db
 import jwt
 import json
 from flask import request, current_app
-from auth_middleware import jwt_required
+from app.auth_middleware import jwt_required
 from flask_restx import Resource
 from typing import Dict, Tuple
 
