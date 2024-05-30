@@ -17,3 +17,6 @@ class auth_dto:
         'username': fields.String(required=True, description='user username'),
         'password': fields.String(required=True, description='user password'),
     })    
+    
+class user_dto:
+    api = Namespace('user', description='user-crud operations')
