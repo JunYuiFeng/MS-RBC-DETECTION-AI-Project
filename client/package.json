@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "chart.js": "^4.4.3",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "core-js": "^3.8.3",
     "vue-router": "^4.0.3"
   },
