@@ -1,24 +1,24 @@
 <template>
     <nav class="flex bg-transparent font-bold justify-between p-3">
-        <div class="text-xl text-white">
+        <router-link 
+            :to="{ name: 'RBCDetection' }" 
+            class="text-xl text-white">
             Healthy and Deformed Cells AI Detection
-        </div>
+        </router-link>
         <div class="text-white flex space-x-2">
             <button 
-                :class="{
-                    'bg-white text-black': toggledButton === 'RBCDetection', 
-                    'bg-gray-400 text-white': toggledButton !== 'RBCDetection'
-                }" 
-                class="rounded rounded-2xl p-2" 
+                :class="[
+                    'rounded rounded-2xl p-2', 
+                    toggledButton === 'RBCDetection' ? 'bg-white text-black' : 'bg-gray-400 text-white'
+                ]" 
                 @click="toggleButton('RBCDetection')">
                 RBC Detection
             </button>
             <button 
-                :class="{
-                    'bg-white text-black': toggledButton === 'RBCComparison', 
-                    'bg-gray-400 text-white': toggledButton !== 'RBCComparison'
-                }" 
-                class="rounded rounded-2xl p-2" 
+                :class="[
+                    'rounded rounded-2xl p-2', 
+                    toggledButton === 'RBCComparison' ? 'bg-white text-black' : 'bg-gray-400 text-white'
+                ]" 
                 @click="toggleButton('RBCComparison')">
                 RBC Image Comparison
             </button>
@@ -28,18 +28,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const toggledButton = ref<string | null>(null);
 
 const toggleButton = (button: string) => {
     if (toggledButton.value === button) {
-        toggledButton.value = null; // Untoggle if the same button is clicked again
+        toggledButton.value = null;
     } else {
-        toggledButton.value = button; // Toggle the clicked button
+        toggledButton.value = button; 
+
+        // Navigate to the appropriate route
+        if (button === 'RBCComparison') {
+            router.push({ name: 'Comparison' });
+        } else if (button === 'RBCDetection') {
+            router.push({ name: 'RBCDetection' });
+        }
     }
-}
+};
 </script>
 
 <style scoped>
-
 </style>

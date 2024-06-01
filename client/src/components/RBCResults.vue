@@ -1,38 +1,18 @@
 <template>
   <div class="bg-white p-10 w-1/2 rounded-3xl">
-    <div class="text-2xl flex justify-start"><b>Model Result</b></div>
-    <div class="grid grid-cols-12 gap-5">
-      <div class="col-span-5">
-        <div>image</div>
-      </div>
-      <div class="col-span-7">
-        <div class="flex justify-start">Total Cells Detected</div>
-        <div class="flex justify-start">372</div>
-
-        <div class="flex justify-start">Healthy</div>
-        <div class="flex justify-start">240</div>
-
-        <div class="flex justify-start">Deformed Cells</div>
-        <div class="flex justify-start">132</div>
-
-        <div class="flex justify-start">Healthy Cells Percentage</div>
-        <div class="flex justify-start">77%</div>
-
-        <div class="flex justify-start">Deformed Cells Percentage</div>
-        <div class="flex justify-start">23%</div>
-      </div>
-    </div>
+    <div class="text-2xl flex justify-start font-black mb-3">Model Result</div>
+    <CellStatistics/>
 
     <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
 
     <div class="row">
       <div class="grid grid-cols-12 gap-10">
         <div class="col-span-6">
-          <canvas id="chartPie"></canvas>
+          <canvas id="chartPie" class="p-10"></canvas>
         </div>
 
-        <div class="col-span-6" style="height: 200px;">
-          <canvas id="chartBar"></canvas>
+        <div class="col-span-6 ">
+          <canvas id="chartBar" class="mt-12"></canvas>
         </div>
       </div>
     </div>
@@ -43,6 +23,7 @@
 import { onMounted } from 'vue';
 import { Chart, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import CellStatistics from '/src/components/CellStatistics.vue';
 
 // Register Chart.js and the plugin
 Chart.register(...registerables, ChartDataLabels);
@@ -94,6 +75,7 @@ const dataBar = {
   labels: ["Deformed", "Healthy"],
   datasets: [
     {
+      label: 'Cell Count',
       data: [300, 50],
       backgroundColor: [
         "rgb(0,128,0)",
@@ -108,12 +90,17 @@ const configBar = {
   scales: {
     y: {
       beginAtZero: true,
+      max: 500,
+    },
+  },
+  plugins: {
+    datalabels: {
+      color: '#fff', 
     },
   },
 };
 
 onMounted(() => {
-  // Create the charts
   createChart('chartPie', 'pie', dataPie, configPie);
   createChart('chartBar', 'bar', dataBar, configBar);
 });
