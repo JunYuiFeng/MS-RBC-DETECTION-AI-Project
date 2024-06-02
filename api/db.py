@@ -17,8 +17,13 @@ def init_db():
     db.commit()
 
     
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
+def query_db(query, args=(), one=False, mod=False):
+    db = get_db()
+    cur = db.execute(query, args)
+    if mod:
+      db.commit()
+      cur.close()
+      return None
     rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else rv   
