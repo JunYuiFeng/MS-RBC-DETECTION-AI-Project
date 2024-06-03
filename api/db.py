@@ -1,7 +1,8 @@
 import sqlite3
+import os.path
 from flask import g, current_app
 
-DB = 'database.db'
+DB = './database.db'
 
 def get_db():
   db = getattr(g, '_database', None)
@@ -10,6 +11,9 @@ def get_db():
   return db
      
 def init_db():
+  if os.path.isfile(DB):
+    return None
+
   with current_app.app_context():
     db = get_db()
     with current_app.open_resource('../../schema.sql', mode='r') as f:
@@ -21,8 +25,8 @@ def query_db(query, args=(), one=False, mod=False):
     db = get_db()
     cur = db.execute(query, args)
     if mod:
-      db.commit()
       cur.close()
+      db.commit()
       return None
     rv = cur.fetchall()
     cur.close()
