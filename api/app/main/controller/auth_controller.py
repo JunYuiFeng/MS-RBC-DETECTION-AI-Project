@@ -1,7 +1,5 @@
-from db import query_db
 import jwt
 from flask import request, current_app
-from app.auth_middleware import jwt_required
 from flask_restx import Resource
 from typing import Dict, Tuple
 
@@ -12,7 +10,8 @@ api = auth_dto.api
 
 @api.route('/')
 class auth(Resource):
-  def post(self) -> Tuple[int, Dict[str, str]]:
+  
+  def post() -> Tuple[int, Dict[str, str]]:
     """ login resource """
     try:
       data = request.json

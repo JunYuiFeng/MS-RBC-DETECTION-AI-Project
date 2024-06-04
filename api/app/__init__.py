@@ -9,8 +9,8 @@ from .main.controller.user_controller import api as user_ns
 
 blueprint = Blueprint('api', __name__)
 authorizations = {
-  'api-key': {
-    'type': 'apiKey',
+  '': {
+    'type': 'Bearer',
     'in': 'header',
     'name': 'Authorization'
   }

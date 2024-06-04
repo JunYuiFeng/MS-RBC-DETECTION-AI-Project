@@ -1,6 +1,4 @@
 from app.auth_middleware import jwt_required
-from db import query_db
-from flask import request
 from flask_restx import Resource
 
 from ..util.dto import status_dto

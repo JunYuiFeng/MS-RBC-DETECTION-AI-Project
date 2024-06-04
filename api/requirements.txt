@@ -4,3 +4,4 @@ torch
 Pillow
 numpy
 ultralytics
+pyJWT=2.8.0

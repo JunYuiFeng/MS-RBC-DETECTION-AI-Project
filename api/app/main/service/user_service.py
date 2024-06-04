@@ -5,7 +5,7 @@ class user_service(Resource):
   
   @staticmethod
   def get_all():
-    users = query_db("SELECT id, username, email, passwd FROM users")
+    users = query_db("SELECT id, username, email, passwd, role FROM users")
     return users;
   
   # can return boolean since query only returns 1 or 0
@@ -16,7 +16,7 @@ class user_service(Resource):
   
   @staticmethod
   def get_by_id(id: int):
-    data = query_db("SELECT id, username, email FROM users WHERE id = ?", [id], one=True)
+    data = query_db("SELECT id, username, email, passwd, role  FROM users WHERE id = ?", [id], one=True)
     return {
       "id": data[0],
       "username": data[1],
@@ -24,8 +24,8 @@ class user_service(Resource):
     }
      
   @staticmethod
-  def create_user(username: str, email: str, passwd: str):
-    return query_db("INSERT INTO users (username, email, passwd) VALUES (?, ?, ?)", [username, email, passwd], mod=True)
+  def create_user(username: str, email: str, passwd: str, type):
+    return query_db("INSERT INTO users (username, email, passwd, rolepi ) VALUES (?, ?, ?, ?)", [username, email, passwd, type], mod=True)
     
   @staticmethod
   def delete_by_id(id: int):

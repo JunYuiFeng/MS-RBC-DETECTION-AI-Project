@@ -4,15 +4,19 @@ from flask import request
 
 from ..util.dto import user_dto
 from ..service.user_service import user_service
+from app.schema_middleware import expects_format
 api = user_dto.api
+user_schema = user_dto.user_get_schema
 
-# TODO: Rewrite code to allow for get/update/delete on 1 enpoint
-@api.route('/', methods=['POST', 'GET', 'DELETE'])
+
+@api.route('/', methods=['GET', 'POST', 'DELETE'])
 class get_all(Resource):
+  
   @jwt_required
+  @expects_format(user_schema)
   def get(self):
     """ Select single user by id """
-    return user_service.get_all()
+    return user_service.get_by_id(request.json["id"])
   
   @jwt_required
   def post(self):
@@ -25,7 +29,9 @@ class get_all(Resource):
      return delete_user()
 
 
+
 def create_user():
+  # TODO: make this a global decorator
     try:
       data = request.json
       if not data:
@@ -41,7 +47,7 @@ def create_user():
           "error": "Bad request"
         }, 400 # bad request
           
-      return user_service.create_user(data["username"], data["email"], data["passwd"])
+      return user_service.create_user(data["username"], data["email"], data["passwd"], "USER")
     except Exception as e:
         return {
                 "message": "Something went wrong!",
