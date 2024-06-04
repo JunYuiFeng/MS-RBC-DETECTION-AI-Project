@@ -11,15 +11,7 @@ from ..service.auth_service import auth_service
 api = auth_dto.api
 
 @api.route('/')
-class auth_list(Resource):
-  @jwt_required
-  def get(self):
-    """ Get all users """
-    posts = query_db("SELECT * FROM users")
-    return posts
-  
-@api.route('/login')
-class auth_login(Resource):
+class auth(Resource):
   def post(self) -> Tuple[int, Dict[str, str]]:
     """ login resource """
     try:
@@ -46,7 +38,7 @@ class auth_login(Resource):
               user["token"] = jwt.encode(
                 {"id": user["id"]}, 
                 current_app.config["SECRET_KEY"], 
-                algorithm="HS256").decode()
+                algorithm="HS256")
               return {
                 "message": "succesfully fetched authentication token",
                 "data": user
@@ -68,3 +60,4 @@ class auth_login(Resource):
                 "error": str(e),
                 "data": None
         }, 500
+  
