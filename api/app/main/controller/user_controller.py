@@ -6,14 +6,14 @@ from ..util.dto import user_dto
 from ..service.user_service import user_service
 from app.schema_middleware import expects_format
 api = user_dto.api
-user_schema = user_dto.user_get_schema
+user_get_schema = user_dto.user_get_schema
 
 
 @api.route('/', methods=['GET', 'POST', 'DELETE'])
 class get_all(Resource):
   
   @jwt_required
-  @expects_format(user_schema)
+  @expects_format(user_get_schema)
   def get(self):
     """ Select single user by id """
     return user_service.get_by_id(request.json["id"])
@@ -27,8 +27,7 @@ class get_all(Resource):
   def delete(self):
      """ Delete a user by id"""
      return delete_user()
-
-
+  
 
 def create_user():
   # TODO: make this a global decorator
