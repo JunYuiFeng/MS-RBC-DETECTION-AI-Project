@@ -1,6 +1,8 @@
 from typing import Dict, Tuple
 from db import query_db
 from flask_restx import Resource
+from flask import current_app
+import jwt
 
 class auth_service(Resource):
   
@@ -13,11 +15,33 @@ class auth_service(Resource):
   @staticmethod
   def login(email: str, passwd: str):
     data = query_db("SELECT id, username, email FROM users WHERE email = ? AND passwd = ?", [email, passwd], one=True)
-    return {
+    user = {
       "id": data[0],
       "username": data[1],
       "email": data[2]
     }
+    
+    if user:
+            try:
+              user["token"] = jwt.encode(
+                {"id": user["id"]}, 
+                current_app.config["SECRET_KEY"], 
+                algorithm="HS256")
+              return {
+                "message": "succesfully fetched authentication token",
+                "data": user
+              }, 200
+            except Exception as e:
+              return {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e)
+              }, 500
+    return {
+        "message": "Error fetching auth token!, invalid email or password",
+        "data": None,
+        "error": "Unauthorized"
+      }, 404
   
   @staticmethod
   def get_by_id(id: int):
