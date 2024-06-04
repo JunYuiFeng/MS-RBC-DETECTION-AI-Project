@@ -7,18 +7,25 @@ from ..service.user_service import user_service
 api = user_dto.api
 
 # TODO: Rewrite code to allow for get/update/delete on 1 enpoint
-@api.route('/')
+@api.route('/', methods=['POST', 'GET', 'DELETE'])
 class get_all(Resource):
   @jwt_required
   def get(self):
-    """ select all users in the database """
+    """ Select single user by id """
     return user_service.get_all()
   
-@api.route('/create')
-class create_user(Resource):
   @jwt_required
   def post(self):
-    """Create new user"""
+    """ Create a new user """
+    return create_user()
+  
+  @jwt_required
+  def delete(self):
+     """ Delete a user by id"""
+     return delete_user()
+
+
+def create_user():
     try:
       data = request.json
       if not data:
@@ -41,12 +48,8 @@ class create_user(Resource):
                 "error": str(e),
                 "data": None
         }, 500
-          
-@api.route('/delete')
-class delete_user(Resource):
-  @jwt_required
-  def post(self):
-    """Delete a user by id"""
+  
+def delete_user():
     try:
       data = request.json
       if not data:
