@@ -1,5 +1,5 @@
 from functools import wraps
-from .main.service.auth_service import auth_service
+from .main.service.user_service import user_service
 import jwt
 import base64
 from flask import abort, current_app, request
@@ -23,7 +23,7 @@ def jwt_required(f):
     try: 
       jwt_data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
       # current_user= None ## implement get user by id
-      current_user = auth_service.get_by_id(jwt_data["id"])
+      current_user = user_service.get_by_id(jwt_data["id"])
       if current_user is None:
         return {
           "message": "Invalid Authentication token provided",

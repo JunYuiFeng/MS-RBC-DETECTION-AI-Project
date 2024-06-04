@@ -1,25 +1,18 @@
-from db import query_db
 import jwt
 from flask import request, current_app
-from app.auth_middleware import jwt_required
 from flask_restx import Resource
 from typing import Dict, Tuple
 
 from ..util.dto import auth_dto
 from ..service.auth_service import auth_service
+from app.schema_middleware import expects_format
 
 api = auth_dto.api
+login_schema = auth_dto.user_schema
 
 @api.route('/')
-class auth_list(Resource):
-  @jwt_required
-  def get(self):
-    """ Get all users """
-    posts = query_db("SELECT * FROM users")
-    return posts
-  
-@api.route('/login')
-class auth_login(Resource):
+class auth(Resource):
+  @expects_format(login_schema)
   def post(self) -> Tuple[int, Dict[str, str]]:
     """ login resource """
     try:
@@ -46,7 +39,7 @@ class auth_login(Resource):
               user["token"] = jwt.encode(
                 {"id": user["id"]}, 
                 current_app.config["SECRET_KEY"], 
-                algorithm="HS256").decode()
+                algorithm="HS256")
               return {
                 "message": "succesfully fetched authentication token",
                 "data": user
@@ -68,3 +61,4 @@ class auth_login(Resource):
                 "error": str(e),
                 "data": None
         }, 500
+  
