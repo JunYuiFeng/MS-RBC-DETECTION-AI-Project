@@ -10,11 +10,13 @@ class auth_service(Resource):
   @staticmethod
   def get_by_email_and_passwd(email: str, passwd: str):
     user_exists = query_db("SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND passwd = ?)", [email, passwd])
+    user_exists = user_exists[0][0] # gets the  user_exists value  into 1 or 0
     return bool(user_exists)
   
   @staticmethod
   def login(email: str, passwd: str):
     data = query_db("SELECT id, username, email FROM users WHERE email = ? AND passwd = ?", [email, passwd], one=True)
+    
     user = {
       "id": data[0],
       "username": data[1],

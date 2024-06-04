@@ -17,11 +17,12 @@ class auth(Resource):
     data = request.json
     #validate input
     validated = auth_service.get_by_email_and_passwd(data["email"], data["passwd"])
+    print(validated)
     if validated is not True:
       return {
-        "message": "Invalid data",
+        "message": "Invalid credentials",
         "data": None,
         "error": validated
-      }
+      }, 401
     return auth_service.login(data["email"], data["passwd"])
   
