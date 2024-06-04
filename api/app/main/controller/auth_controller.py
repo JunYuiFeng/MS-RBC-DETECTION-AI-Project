@@ -13,7 +13,7 @@ login_schema = auth_dto.user_schema
 @api.route('/')
 class auth(Resource):
   @expects_format(login_schema)
-  def post() -> Tuple[int, Dict[str, str]]:
+  def post(self) -> Tuple[int, Dict[str, str]]:
     """ login resource """
     try:
       data = request.json
