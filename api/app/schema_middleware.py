@@ -5,22 +5,6 @@ from jsonschema.validators import _LATEST_VERSION as LATEST_VALIDATOR
 from typing import Iterable
 
 
-
-def validate_json(f):
-  @wraps(f)
-  def wrapper(*args, **kwargs):
-    try:
-      request.json
-    except Exception as e:
-      return {
-          "message": "Payload must be a valid json",
-          "data": None,
-          "error": "Bad request"
-        }, 400 # Bad request
-    return f(*args, **kwargs)
-  return wrapper
-
-
 def expects_format(schema=None, check_formats=False):
   if schema is None:
     schema = dict()
