@@ -5,12 +5,14 @@ from typing import Dict, Tuple
 
 from ..util.dto import auth_dto
 from ..service.auth_service import auth_service
+from app.schema_middleware import expects_format
 
 api = auth_dto.api
+login_schema = auth_dto.user_schema
 
 @api.route('/')
 class auth(Resource):
-  
+  @expects_format(login_schema)
   def post() -> Tuple[int, Dict[str, str]]:
     """ login resource """
     try:

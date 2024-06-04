@@ -8,7 +8,8 @@ class status_dto:
 class auth_dto:
     api = Namespace('auth', description='authentication operations')
     user_schema = {
-        
+        "email": "string",
+        "passwd": "string"
     }  
     
 class users_dto:
