@@ -22,7 +22,7 @@
       </div>
 
       <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form class="space-y-6" action="#" method="POST">
+        <div class="space-y-6">
           <div>
             <div class="flex items-center justify-between">
               <label
@@ -37,7 +37,7 @@
                 name="email"
                 type="email"
                 autocomplete="email"
-                required=""
+                required
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -57,7 +57,7 @@
                 name="password"
                 type="password"
                 autocomplete="current-password"
-                required=""
+                required
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -67,11 +67,17 @@
             <button
               type="submit"
               class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              @click="login"
             >
               Sign in
             </button>
           </div>
-        </form>
+          <div v-if="showErrorLabel" role="alert">
+            <div class="bg-red-500 text-white font-bold rounded px-4 py-2">
+              Error: Incorrect credentials
+            </div>
+          </div>
+        </div>
 
         <p class="mt-10 text-center text-sm text-gray-500">
           Not a member? Ask the administrator to create an account for you
@@ -83,6 +89,39 @@
 
 <script setup lang="ts">
 import NavBar from "/src/components/NavBar.vue";
+import { ref } from "vue";
+
+const showErrorLabel = ref(false);
+
+const email = ref("email");
+const password = ref("password");
+
+const login = async () => {
+  const response = await fetch("http://localhost:5000/auth", {
+    method: "POST",
+    body: JSON.stringify({ email: email, passwd: password}),
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (response.ok) {
+    console.log("Login successful");
+  } else {
+    showErrorLabel.value = true;
+  }
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+h2 {
+  color: white;
+}
+
+label {
+  color: white;
+}
+
+p {
+  color: white;
+  opacity: 0.8;
+}
+</style>
