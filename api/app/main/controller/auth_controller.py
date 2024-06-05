@@ -18,7 +18,7 @@ class auth(Resource):
     #validate input
     validated = auth_service.get_by_email_and_passwd(data["email"], data["passwd"])
     print(validated)
-    if validated is not True:
+    if not validated:
       return {
         "message": "Invalid credentials",
         "data": None,

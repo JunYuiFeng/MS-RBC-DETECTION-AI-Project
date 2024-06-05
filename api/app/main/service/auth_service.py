@@ -45,6 +45,7 @@ class auth_service(Resource):
         "error": "Unauthorized"
       }, 404
   
+  
   @staticmethod
   def get_by_id(id: int):
     data = query_db("SELECT id, username, email FROM users WHERE id = ?", [id], one=True)
