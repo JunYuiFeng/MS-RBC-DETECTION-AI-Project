@@ -1,23 +1,8 @@
 <template>
-  <div class="bg-gradient-to-r from-violet-900 to-indigo-600">
-    <NavBar />
-  </div>
-
   <div
-    class="flex items-center justify-center min-h-screen bg-gradient-to-r from-violet-900 to-indigo-600"
+    class="flex items-center justify-center h-full"
   >
-    <!-- <img
-      v-if="prediction"
-      :src="`data:image/jpg;base64,${prediction.annotatedImage}`"
-      class="w-20 h-20"
-      alt="annotated image"
-    />
-    <div v-if="prediction">
-      <p>Deformed cells detected: {{ prediction["deformedCellsDetected"] }}</p>
-      <p>Healthy cells detected: {{ prediction["healthyCellsDetected"] }}</p>
-    </div> -->
-    <div v-if="error">{{ error }}</div>
-    <RBCResults v-else-if="prediction" :predictions="prediction"/>
+    <RBCResults v-if="prediction" :predictions="prediction" />
 
     <div v-else class="bg-white p-10 w-1/2 rounded-3xl">
       <div class="text-2xl font-black flex justify-start mb-5">
@@ -28,13 +13,14 @@
           <DropFile :multiple="false" @fileSelected="handleSelectedFile" />
         </div>
       </div>
-      <div class="flex justify-center pt-10">
+      <div v-if="error" class="text-red-500 mt-3">{{ error }}</div>
+      <div class="flex justify-center mt-3">
         <button
           class="hover:bg-blue-700 text-white font-bold py-2 px-4 bg-indigo-950 text-sm rounded-xl transition-all"
           @click="detect"
         >
-          {{!isLoading ? 'Detect RBC' : ''}}
-          <LoadingSpinner v-if="isLoading"/>
+          {{ !isLoading ? "Detect RBC" : "" }}
+          <LoadingSpinner v-if="isLoading" />
         </button>
       </div>
     </div>
