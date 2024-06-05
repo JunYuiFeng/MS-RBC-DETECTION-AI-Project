@@ -4,7 +4,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'RBCDEtection',
+    name: 'RBCDetection',
     component: () => import('../views/RBCDetection.vue')
   },
   {
@@ -21,8 +21,8 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/LoginView.vue')
   },
   {
-    path: '/compare',
-    name: 'Compare',
+    path: '/comparison',
+    name: 'Comparison',
     component: () => import('../views/CompareView.vue')
   },
   {

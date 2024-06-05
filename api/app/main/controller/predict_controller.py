@@ -1,6 +1,11 @@
 # app/controller/predict_controller.py
+import base64
+import cv2
 from flask_restx import Namespace, Resource
 from flask import request, jsonify, send_file
+import numpy as np
+import torch
+from torchvision import transforms
 from app.main.model.yolov8_model import load_model
 from PIL import Image
 import io
@@ -12,35 +17,36 @@ model = load_model()
 @predict_ns.route('/')
 class Predict(Resource):
     def post(self):
-        print(">>>> PREDICT")
-        print(model)
         if 'image' not in request.files:
             return {'error': 'No image uploaded'}, 400
 
         file = request.files['image']
-        img = Image.open(file.stream)
-        
-        # Perform inference
-        results = model(img)
+        image = Image.open(io.BytesIO(file.read()))
 
-        # Annotate image
-        annotated_img = results.render()[0]
-        annotated_img_pil = Image.fromarray(annotated_img)
+        transform = transforms.Compose([
+        transforms.Resize((640, 640)),  
+        transforms.ToTensor(),  # Converts the image to a Tensor
+        ])
+    
+        # Apply the transformations
+        image = transform(image).unsqueeze(0)  # Add batch dimension
+        image = image.float()
 
-        # Convert image to byte array
-        img_io = io.BytesIO()
-        annotated_img_pil.save(img_io, 'JPEG')
-        img_io.seek(0)
+        results = model(image, conf=0.6)
 
-        # Extract other results if needed
-        detections = results.pandas().xyxy[0].to_dict(orient="records")
+        for result in results:
+            boxes = result.boxes  # Boxes object for bounding box outputs
+            unique, counts = np.unique(boxes.cls.numpy(), return_counts=True)
+            annotated_image = result.plot()  # Get the annotated image as NumPy array
 
-        return jsonify({
-            'annotations': detections,
-            'image': request.url_root + 'predict/annotated_image'
-        })
+            img = Image.fromarray(annotated_image.astype('uint8'))
+            buff = io.BytesIO()
+            img.save(buff, format="JPEG")
+            new_image_string = base64.b64encode(buff.getvalue()).decode("utf-8") 
+               
+            return jsonify({
+                'deformedCellsDetected': int(counts[0]),
+                'healthyCellsDetected': int(counts[1]),
+                'annotatedImage': new_image_string
+                        })
 
-@predict_ns.route('/annotated_image')
-class AnnotatedImage(Resource):
-    def get(self):
-        return send_file(img_io, mimetype='image/jpeg')

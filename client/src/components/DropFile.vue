@@ -13,12 +13,12 @@
             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
                 800x400px)</p>
         </div>
-        <input id="dropzone-file" type="file" class="hidden" :multiple="multiple" accept="image/*"/>
+        <input id="dropzone-file" type="file" class="hidden" :multiple="multiple" accept="image/*" @change="handleFileChange"/>
     </label>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 defineProps({
     multiple: {
@@ -26,6 +26,16 @@ defineProps({
         default: false
     }
 });
+
+const emit = defineEmits<{
+  (event: "fileSelected", files: FileList | null): void
+}>()
+
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  emit('fileSelected', target.files);
+};
 </script>
 
 <style scoped></style>
