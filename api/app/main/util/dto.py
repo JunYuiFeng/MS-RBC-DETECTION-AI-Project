@@ -3,17 +3,38 @@ from flask_restx import Namespace, fields
 
 class status_dto:
     api = Namespace('status', description='status operations')
-    user = api.model('status', {
-        'email': fields.String(required=True, description='user email address'),
-        'username': fields.String(required=True, description='user username'),
-        'password': fields.String(required=True, description='user password'),
-    })
     
     
 class auth_dto:
     api = Namespace('auth', description='authentication operations')
-    user = api.model('auth', {
-        'email': fields.String(required=True, description='user email address'),
-        'username': fields.String(required=True, description='user username'),
-        'password': fields.String(required=True, description='user password'),
-    })    
+    user_schema = {
+        'type': 'object',
+        'properties': {
+            'email': {'type': 'string'},
+            'passwd': {'type': 'string'}
+        },
+        'required': ['email', 'passwd']
+    }
+    
+class users_dto:
+    api = Namespace('users', description='user-crud operations')
+    
+class user_dto:
+    api = Namespace('user', description='single user operations')
+    user_id_schema = {
+        'type': 'object',
+        'properties': {
+            'id': {'type': 'integer'},
+        },
+        'required': ['id']
+    }
+    user_full_schema = {
+        'type': 'object',
+        'properties': {
+            'id': {'type': 'integer'},
+            'username': {'type': 'string'},
+            'email': {'type': 'string'},
+            'passwd': {'type': 'string'},
+        },
+        'required': ['username', 'email', 'passwd']
+    }
