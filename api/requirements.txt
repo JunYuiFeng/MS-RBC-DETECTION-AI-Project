@@ -4,7 +4,6 @@ torch
 Pillow
 numpy
 ultralytics
-jwt
 torchvision
 flask_cors
-pyJWT=2.8.0
+pyJWT==2.8.0

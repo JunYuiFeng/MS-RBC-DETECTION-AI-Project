@@ -2,7 +2,7 @@ import { ILoginRequest } from "@/config/interfaces";
 import axios, { AxiosResponse } from "axios";
 
 // Define the API base URL (replace with your actual URL)
-const API_URL = "http://localhost";
+const API_URL = "http://localhost:5000";
 
 interface ImageData {
   data: string; // Base64 encoded image data
