@@ -1,8 +1,8 @@
 import { ILoginRequest } from "@/config/interfaces";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 // Define the API base URL (replace with your actual URL)
-const API_URL = "http://localhost";
+const API_URL = "http://127.0.0.1:5000";
 
 interface ImageData {
   data: string; // Base64 encoded image data
@@ -21,7 +21,7 @@ export default class ApiClient {
 
     try {
       const response: AxiosResponse<PredictionResponse> = await axios.post(
-        `${API_URL}/predict`,
+        `${API_URL}/predict/`,
         formData,
         {
           headers: {
@@ -35,10 +35,10 @@ export default class ApiClient {
     }
   }
 
-  static async login(data: ILoginRequest): Promise<any> {
+  static async login(data: ILoginRequest,): Promise<any> {
     try {
       const response: AxiosResponse<PredictionResponse> = await axios.post(
-        `${API_URL}/auth`,
+        `${API_URL}/auth/`,
         data,
          {
           headers: {
@@ -47,8 +47,8 @@ export default class ApiClient {
         }
       );
       return response.data;
-    } catch (error) {
-      throw new Error("Error in Login Request: " + error);
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
     }
   }
 }
