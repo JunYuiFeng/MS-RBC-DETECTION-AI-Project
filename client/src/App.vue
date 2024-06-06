@@ -1,14 +1,11 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav> -->
-  <router-view/>
+  <NavBar />
+  <router-view />
 </template>
 
 <script setup lang="ts">
-import 'tailwindcss/tailwind.css'
-
+import "tailwindcss/tailwind.css";
+import NavBar from "./components/NavBar.vue";
 </script>
 <style>
 #app {
@@ -17,18 +14,7 @@ import 'tailwindcss/tailwind.css'
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
+  @apply bg-gradient-to-r from-violet-900 to-indigo-600;
 }
-
-/* nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>

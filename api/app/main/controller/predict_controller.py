@@ -39,12 +39,14 @@ class Predict(Resource):
             unique, counts = np.unique(boxes.cls.numpy(), return_counts=True)
             annotated_image = result.plot()  # Get the annotated image as NumPy array
 
-            # Convert image to bytes (assuming RGB format)
-            encoded_image = base64.b64encode(annotated_image.tobytes()).decode('utf-8')
-       
-        return jsonify({
-            'deformedCellsDetected': int(counts[0]),
-            'healthyCellsDetected': int(counts[1]),
-            'annotatedImage': encoded_image
+            img = Image.fromarray(annotated_image.astype('uint8'))
+            buff = io.BytesIO()
+            img.save(buff, format="JPEG")
+            new_image_string = base64.b64encode(buff.getvalue()).decode("utf-8") 
+               
+            return jsonify({
+                'deformedCellsDetected': int(counts[0]),
+                'healthyCellsDetected': int(counts[1]),
+                'annotatedImage': new_image_string
                         })
 

@@ -2,12 +2,9 @@ from functools import wraps
 from .main.service.user_service import user_service
 import jwt
 import base64
-from flask import abort, current_app, request
+from flask import current_app, request
 
 
-
-
-## apply @jwt_required to secure endpoints
 def jwt_required(f):
   @wraps(f)
   def decorated(*args, **kwargs):
@@ -22,7 +19,6 @@ def jwt_required(f):
       }, 401 # Unauthorized
     try: 
       jwt_data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
-      # current_user= None ## implement get user by id
       current_user = user_service.get_by_id(jwt_data["id"])
       if current_user is None:
         return {

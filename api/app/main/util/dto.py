@@ -21,10 +21,20 @@ class users_dto:
     
 class user_dto:
     api = Namespace('user', description='single user operations')
-    user_get_schema = {
+    user_id_schema = {
         'type': 'object',
         'properties': {
             'id': {'type': 'integer'},
         },
         'required': ['id']
+    }
+    user_full_schema = {
+        'type': 'object',
+        'properties': {
+            'id': {'type': 'integer'},
+            'username': {'type': 'string'},
+            'email': {'type': 'string'},
+            'passwd': {'type': 'string'},
+        },
+        'required': ['username', 'email', 'passwd']
     }

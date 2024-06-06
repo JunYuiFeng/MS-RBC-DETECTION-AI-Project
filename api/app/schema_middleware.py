@@ -1,7 +1,6 @@
 from functools import wraps
 from flask import request
-from jsonschema import validate, FormatChecker, ValidationError
-from typing import Iterable
+from jsonschema import validate, ValidationError
 
 
 def expects_format(schema=None):
