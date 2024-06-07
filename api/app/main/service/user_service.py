@@ -1,6 +1,7 @@
 from db import query_db
 from flask_restx import Resource
 
+
 class user_service(Resource):
   
   @staticmethod
@@ -8,20 +9,10 @@ class user_service(Resource):
     users = query_db("SELECT id, username, email, passwd, role FROM users")
     return users;
   
-  # can return boolean since query only returns 1 or 0
-  @staticmethod
-  def get_by_email_and_passwd(email: str, passwd: str):
-    user_exists = query_db("SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND passwd = ?)", [email, passwd])
-    return bool(user_exists)
-  
   @staticmethod
   def get_by_id(id: int):
-    data = query_db("SELECT id, username, email, passwd, role  FROM users WHERE id = ?", [id], one=True)
-    return {
-      "id": data[0],
-      "username": data[1],
-      "email": data[2]
-    }
+    data = query_db("SELECT id, username, email, passwd, role FROM users WHERE id = ?", [id])
+    return data
     
   @staticmethod
   def create_user(username: str, email: str, passwd: str, type):

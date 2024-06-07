@@ -9,11 +9,11 @@ from .main.controller.user_controller import api as user_ns
 
 blueprint = Blueprint('api', __name__)
 authorizations = {
-  '': {
-    'type': 'Bearer',
+  'jsonWebToken': {
+    'type': 'apiKey',
     'in': 'header',
     'name': 'Authorization'
-  }
+},
 }
 
 api = Api(

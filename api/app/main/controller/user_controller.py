@@ -1,6 +1,7 @@
 from app.auth_middleware import jwt_required
-from flask_restx import Resource
+from flask_restx import Resource, fields
 from flask import request
+
 
 from ..util.dto import user_dto
 from ..service.user_service import user_service
@@ -9,12 +10,18 @@ api = user_dto.api
 user_id_schema = user_dto.user_id_schema
 user_full_schema = user_dto.user_full_schema
 
+resource_fields = api.model('Resource', {
+    'id': fields.Integer,
+    'username': fields.String,
+    'email': fields.String
+})
 
 @api.route('/', methods=['GET', 'PUT', 'POST', 'DELETE'])
 class user_controller(Resource):
   
   @jwt_required
   @expects_format(user_id_schema)
+  # @api.marshal_with(user_full_schema)
   def get(self):
     """ Select single user by id """
     return user_service.get_by_id(request.json["id"])
