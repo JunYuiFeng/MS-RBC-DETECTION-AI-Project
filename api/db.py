@@ -31,9 +31,9 @@ def query_db(query, args=(), bool=False, mod=False):
     try:
         cur = db.execute(query, args)
         if mod:
-            cur.close()
-            db.commit()
-            return None
+          cur.close()
+          db.commit()
+          return None
         # handle SELECT exists statements
         if bool:
             bool_res = cur.fetchall()
@@ -43,14 +43,13 @@ def query_db(query, args=(), bool=False, mod=False):
         cols = [description[0] for description in cur.description]
         rv = cur.fetchall()  
         if not cols:
-            return []
+          return []
         result = [dict(zip(cols, row)) for row in rv]
+        cur.close()
         return result
     except sqlite3.Error as e:
         logging.error(f"SQLite error: {e}")
         return []
-    finally:
-        cur.close()
   
   
 def to_json(response, cursor):

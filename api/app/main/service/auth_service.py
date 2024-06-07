@@ -14,17 +14,19 @@ class auth_service(Resource):
   
   @staticmethod
   def login(email: str, passwd: str):
-    user = query_db("SELECT id, username, email FROM users WHERE email = ? AND passwd = ?", [email, passwd])
-    print(user)
-    if user:
+    res = query_db("SELECT id, username, email, passwd, role FROM users WHERE email = ? AND passwd = ?", [email, passwd])[0]
+    if res:
             try:
-              user[0]['token'] = jwt.encode(
-                {"id": user[0]}, 
+              token = jwt.encode(
+                {"id": res['id']}, 
                 current_app.config["SECRET_KEY"], 
                 algorithm="HS256")
               return {
                 "message": "succesfully fetched authentication token",
-                "data": user
+                "data": {
+                  "user": res,
+                  "token": token
+                }
               }, 200
             except Exception as e:
               return {

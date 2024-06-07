@@ -13,13 +13,16 @@ api = users_dto.api
 
 @api.route('/')
 class get_all(Resource):
-  @jwt_required
-  def get(self):
+    
+    @api.marshal_with(users_dto.users_schema, skip_none=True) 
+    @jwt_required
+    def get(self):
         """ Select all users in the database """
         try:
             users = user_service.get_all()
-            logging.debug(f"Fetched users: {users}")
-            return jsonify(users)
+            return {
+                'users': users
+            }
         except Exception as e:
             logging.error(f"Error fetching users: {e}")
             return {'message': 'An error occurred fetching users'}, 500
