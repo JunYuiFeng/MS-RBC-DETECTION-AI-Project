@@ -16,7 +16,7 @@
       </div>
       <div class="flex justify-center pt-10">
         <button
-          class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-indigo-950 text-sm rounded-xl"
+          class="hover:bg-blue-700 text-white font-bold py-2 px-4 bg-indigo-950 text-sm rounded-xl"
           @click="detect"
         >
           Detect RBC

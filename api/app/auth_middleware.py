@@ -19,7 +19,7 @@ def jwt_required(f):
       }, 401 # Unauthorized
     try: 
       jwt_data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
-      current_user = user_service.get_by_id(jwt_data["id"])
+      current_user = user_service.get_by_id_with_role(jwt_data["id"])
       if current_user is None:
         return {
           "message": "Invalid Authentication token provided",

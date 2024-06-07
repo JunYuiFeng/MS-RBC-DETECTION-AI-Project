@@ -16,9 +16,8 @@ export default function useLogin() {
     try {
       const response = await ApiService.login({email, passwd: password});
       user.value = response;
-    } catch (err) {
-      console.log(err)
-      error.value = 'Credentials are incorrect. Please try again';
+    } catch (err: any) {
+      error.value = err.message ?? 'Credentials are incorrect. Please try again';
     } finally {
       isLoading.value = false;
     }
