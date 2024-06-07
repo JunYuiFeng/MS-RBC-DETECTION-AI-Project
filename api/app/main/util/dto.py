@@ -1,10 +1,6 @@
 from flask_restx import Namespace
 from flask_restx import fields
 
-
-
-class status_dto:
-    api = Namespace('status', description='status operations')
   
     
 class user_dto:
