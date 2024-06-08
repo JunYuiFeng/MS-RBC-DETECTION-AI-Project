@@ -27,14 +27,17 @@
                                 Delete User
                             </button>
                         </td>
-                    </tr>
+                    </tr>                                
                 </tbody>
             </table>  
+            <div v-if="errorMessage" id="errorLabel" class="border border-red-400 rounded bg-red-100 px-4 py-3 mt-5 text-red-700 fade">{{ errorMessage }}</div>    
+            <div v-if="successMessage" id="messageLabel" class="border border-green-400 rounded bg-green-100 px-4 py-3 mt-5 text-green-700 fade">{{ successMessage }}</div>   
             <UserModal v-if="showCreateModal" :user="selectedUser" :editMode="false" @close="closeModal"/>
             <UserModal v-if="showEditModal" :user="selectedUser" :editMode="true" @close="closeModal"/>
         </div>
     </div>
 </template>
+
 
 <script setup lang="ts">
 import UserModal from '@/components/UserModal.vue';
@@ -52,6 +55,8 @@ const showCreateModal = ref(false);
 const showEditModal = ref(false);
 const headers = ['Email', 'Username', 'Password']
 const selectedUser = ref<User | null>(null);
+const errorMessage = ref<string | null>(null);
+const successMessage = ref<string | null>(null);
 
 const fetchUsers = async () => {
     try {
@@ -59,7 +64,7 @@ const fetchUsers = async () => {
         const data = await response.json();
         items.value = data.users;
     } catch (error) {
-        console.error('Error fetching users:', error);
+        showErrorLabel('Error fetching users');
     }
 }
 
@@ -75,11 +80,12 @@ const deleteUser = async (index: number) => {
         });
         if (response.ok) {
             items.value.splice(index, 1);
+            showMessageLabel('User deleted successfully');
         } else {
-            console.error('Failed to delete user:', response.statusText);
+            showErrorLabel('Failed to delete user');
         }
     } catch (error) {
-        console.error('Error deleting user:', error);
+        showErrorLabel('Error deleting user');
     }
 }
 
@@ -94,13 +100,31 @@ const openEditModal = (index: number) => {
 }
 
 const closeModal = () => {
+    fetchUsers();
     showCreateModal.value = false;
     showEditModal.value = false;
+}
+
+const showMessageLabel = (message: string) => {
+    successMessage.value = message;
+    errorMessage.value = null;
+    setTimeout(() => {
+        successMessage.value = null;
+    }, 3000);
+}
+
+const showErrorLabel = (message: string) => {
+    errorMessage.value = message;
+    successMessage.value = null;
+    setTimeout(() => {
+        errorMessage.value = null;
+    }, 3000);
 }
 
 onMounted(() => {
     fetchUsers();
 });
+
 </script>
 
 <style scoped> 
@@ -111,4 +135,19 @@ tr {
 .edit-button {
     width: 100px; /* Adjust the width as needed */
 }
+
+.fade {
+    transition: opacity 0.5s;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 1s;
+}
+
+.fade-enter,
+.fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0;
+}
+
 </style>

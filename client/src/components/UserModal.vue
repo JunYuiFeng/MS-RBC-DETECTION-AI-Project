@@ -15,7 +15,7 @@
                     <input v-model="password" type="text" class="w-full px-3 py-2 border rounded"/>
                 </div>
                 <div class="flex justify-end gap-4">
-                    <button @click="$emit('close')" type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                    <button @click="emit('close')" type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
                     <button @click="handleSubmit" class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Confirm</button>
                 </div>
             </div>
@@ -24,7 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, onMounted } from 'vue';
+import { defineProps, defineEmits, ref, onMounted } from 'vue';
+
+const emit = defineEmits(['close']);
 
 const props = defineProps({
     editMode: {
@@ -48,19 +50,6 @@ const username = ref('username');
 const password = ref('password');
 
 const handleSubmit = () => {
-    const editUserData = {
-        id: props.user.id,
-        email: email.value,
-        username: username.value,
-        passwd: password.value
-    };
-
-    const createUserData = {
-        email: email.value,
-        username: username.value,
-        passwd: password.value
-    };
-
     const sendRequest = (method: 'PUT' | 'POST', userData: any, errorMessage: string) => {
         return fetch(`http://localhost:5000/user/`, {
             method: method,
@@ -77,6 +66,7 @@ const handleSubmit = () => {
         })
         .finally(() => {
             resetForm();
+            emit('close');
         })
         .catch(error => {
             console.error(errorMessage, error);
@@ -85,8 +75,21 @@ const handleSubmit = () => {
     };
 
     if (props.editMode) {
+        const editUserData = {
+            id: props.user.id,
+            email: email.value,
+            username: username.value,
+            passwd: password.value
+        };
+
         sendRequest('PUT', editUserData, 'Error updating user');
     } else {
+        const createUserData = {
+            email: email.value,
+            username: username.value,
+            passwd: password.value
+        };
+
         sendRequest('POST', createUserData, 'Error creating user');
     }
 }
