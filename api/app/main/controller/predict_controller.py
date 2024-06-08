@@ -7,19 +7,28 @@ import numpy as np
 import torch
 from torchvision import transforms
 from app.main.model.yolov8_model import load_model
+from ..util.dto import predict_dto
 from PIL import Image
 import io
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
-predict_ns = Namespace('predict', description='Prediction operations')
-
+api = predict_dto.api
 model = load_model()
 
-@predict_ns.route('/')
+@api.marshal_with(predict_dto.predict_data)
+@api.expect(predict_dto.parser)
+@api.doc(responses={
+    200: 'Success',
+    400: 'No image uploaded',
+    500: 'Internal Server error'
+})
+@api.route('/')
 class Predict(Resource):
     def post(self):
         if 'image' not in request.files:
             return {'error': 'No image uploaded'}, 400
-
+        logging.error(f'format: {request}')
         file = request.files['image']
         image = Image.open(io.BytesIO(file.read()))
 

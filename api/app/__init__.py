@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restx import Api
 
-from .main.controller.predict_controller import predict_ns
+from .main.controller.predict_controller import api as predict_ns
 from .main.controller.auth_controller import api as auth_ns
 from .main.controller.users_controller import api as users_ns
 from .main.controller.user_controller import api as user_ns
