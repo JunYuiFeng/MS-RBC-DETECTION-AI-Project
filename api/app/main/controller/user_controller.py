@@ -1,5 +1,5 @@
 from app.auth_middleware import jwt_required
-from flask_restx import Resource, fields
+from flask_restx import Resource
 from flask import request
 
 
@@ -13,12 +13,21 @@ class user_controller(Resource):
   
   @api.expect(user_dto.user_id_schema)
   @api.marshal_with(user_dto.user_full_schema, skip_none=True)
+  @api.doc(responses={
+        401: ('Unauthorized', user_dto.error),
+        500: ('Internal Server error', user_dto.error)
+  })
   @jwt_required
   def get(self):
     """ Select single user by id """
     return user_service.get_by_id(request.json["id"])
 
   @api.expect(user_dto.user_mod_schema)
+  @api.doc(responses={
+        200: 'Succes',
+        401: ('Unauthorized', user_dto.error),
+        500: ('Internal Server error', user_dto.error)
+  })
   @jwt_required
   def post(self):
     """ Create a new user """
@@ -28,6 +37,10 @@ class user_controller(Resource):
   
   @api.expect(user_dto.user_mod_schema)
   @api.marshal_with(user_dto.user_full_schema)
+  @api.doc(responses={
+        401: ('Unauthorized', user_dto.error),
+        500: ('Internal Server error', user_dto.error)
+  })
   @jwt_required
   def put(self):
     """ Modify user information """
@@ -35,6 +48,11 @@ class user_controller(Resource):
     return user_service.modify_user(data["id"], data["username"], data["email"], data["passwd"])
   
   @api.expect(user_dto.user_id_schema)
+  @api.doc(responses={
+        200: 'Success',
+        401: ('Unauthorized', user_dto.error),
+        500: ('Internal Server error', user_dto.error)
+  })
   @jwt_required
   def delete(self):
      """ Delete a user by id"""
