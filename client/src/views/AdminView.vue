@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-violet-900 to-indigo-600">
+    <div class="flex justify-center mt-10 min-h-screen bg-gradient-to-r from-violet-900 to-indigo-600">
         <div class="bg-white p-10 w-1/2 rounded-3xl">
             
             <h1 class="text-2xl font-black pb-5">Admin Page</h1>
@@ -32,8 +32,8 @@
             </table>  
             <div v-if="errorMessage" id="errorLabel" class="border border-red-400 rounded bg-red-100 px-4 py-3 mt-5 text-red-700 fade">{{ errorMessage }}</div>    
             <div v-if="successMessage" id="messageLabel" class="border border-green-400 rounded bg-green-100 px-4 py-3 mt-5 text-green-700 fade">{{ successMessage }}</div>   
-            <UserModal v-if="showCreateModal" :user="selectedUser" :editMode="false" @close="closeModal"/>
-            <UserModal v-if="showEditModal" :user="selectedUser" :editMode="true" @close="closeModal"/>
+            <UserModal v-if="showCreateModal" :user="selectedUser" :editMode="false" @close="closeModal" @confirm="handleConfirm"/>
+            <UserModal v-if="showEditModal" :user="selectedUser" :editMode="true" @close="closeModal" @confirm="handleConfirm"/>
         </div>
     </div>
 </template>
@@ -100,9 +100,21 @@ const openEditModal = (index: number) => {
 }
 
 const closeModal = () => {
-    fetchUsers();
     showCreateModal.value = false;
     showEditModal.value = false;
+}
+
+const handleConfirm = () => {
+    fetchUsers();
+
+    if (showCreateModal.value == true) {
+        showMessageLabel('User created successfully');
+    }
+    else {
+        showMessageLabel('User updated successfully');
+    }
+
+    closeModal();
 }
 
 const showMessageLabel = (message: string) => {
@@ -110,7 +122,7 @@ const showMessageLabel = (message: string) => {
     errorMessage.value = null;
     setTimeout(() => {
         successMessage.value = null;
-    }, 3000);
+    }, 2000);
 }
 
 const showErrorLabel = (message: string) => {
@@ -118,7 +130,7 @@ const showErrorLabel = (message: string) => {
     successMessage.value = null;
     setTimeout(() => {
         errorMessage.value = null;
-    }, 3000);
+    }, 2000);
 }
 
 onMounted(() => {
@@ -146,7 +158,7 @@ tr {
 }
 
 .fade-enter,
-.fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+.fade-leave-to {
     opacity: 0;
 }
 

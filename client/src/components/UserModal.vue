@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'confirm']);
 
 const props = defineProps({
     editMode: {
@@ -66,7 +66,7 @@ const handleSubmit = () => {
         })
         .finally(() => {
             resetForm();
-            emit('close');
+            emit('confirm');
         })
         .catch(error => {
             console.error(errorMessage, error);
