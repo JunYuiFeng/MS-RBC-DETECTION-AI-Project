@@ -6,4 +6,5 @@ numpy
 ultralytics
 torchvision
 flask_cors
-pyJWT=2.8.0
+opencv-python
+pyJWT==2.8.0
