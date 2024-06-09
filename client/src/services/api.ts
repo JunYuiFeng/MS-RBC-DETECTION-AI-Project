@@ -86,7 +86,7 @@ export default class ApiClient {
   static async createUser(data: CreateUserData): Promise<any> {
     try {
       const response: AxiosResponse<any> = await axios.post(
-        `${API_URL}/user`,
+        `${API_URL}/user/`,
         data,
         {
           headers: {
@@ -104,7 +104,7 @@ export default class ApiClient {
   static async updateUser(data: User): Promise<any> {
     try {
       const response: AxiosResponse<any> = await axios.put(
-        `${API_URL}/user/${data.id}/`,
+        `${API_URL}/user/`,
         data,
         {
           headers: {
@@ -122,11 +122,14 @@ export default class ApiClient {
   static async deleteUser(id: number): Promise<any> {
     try {
       const response: AxiosResponse<any> = await axios.delete(
-        `${API_URL}/user/${id}/`,
+        `${API_URL}/user/`,
         {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${store.getters.getToken}`,
+          },
+          data: {
+            id,
           },
         }
       );

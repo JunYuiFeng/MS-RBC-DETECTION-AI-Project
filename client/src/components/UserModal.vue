@@ -4,7 +4,7 @@
             <div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Email:</label>
-                    <input v-model="email"  type="email" class="w-full px-3 py-2 border rounded" required/>
+                    <input v-model="email" type="email" class="w-full px-3 py-2 border rounded" required/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Username:</label>
@@ -14,6 +14,7 @@
                     <label class="block text-gray-700">Password:</label>
                     <input v-model="password" type="text" class="w-full px-3 py-2 border rounded" required/>
                 </div>
+                <div v-if="errorMessage" id="errorLabel" class="border border-red-400 rounded bg-red-100 px-4 py-3 mb-5 text-red-700 fade">{{ errorMessage }}</div>    
                 <div class="flex justify-end gap-4">
                     <button @click="emit('close')" type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
                     <button @click="handleSubmit" class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Confirm</button>
@@ -26,10 +27,15 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
 import { useCreateUser } from '@/composables/useCreateUser';
+import { useUpdateUser } from '@/composables/useUpdateUser';
 
+const email = ref('email');
+const username = ref('username');
+const password = ref('password');
 const emit = defineEmits(['close', 'confirm']);
 const { createUser, createUserError } = useCreateUser();
-
+const { updateUser, updateUserError } = useUpdateUser();
+const errorMessage = ref<string | null>(null);
 
 const props = defineProps({
     editMode: {
@@ -48,36 +54,11 @@ const resetForm = () => {
     password.value = '';
 };
 
-const email = ref('email');
-const username = ref('username');
-const password = ref('password');
-
-const handleSubmit = () => {
-    // const sendRequest = (method: 'PUT' | 'POST', userData: any, errorMessage: string) => {
-    //     return fetch(`http://localhost:5000/user/`, {
-    //         method: method,
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(userData)
-    //     })
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error(errorMessage);
-    //         }
-    //         return response.json();
-    //     })
-    //     .finally(() => {
-    //         resetForm();
-    //         emit('confirm');
-    //     })
-    //     .catch(error => {
-    //         console.error(errorMessage, error);
-    //         throw error;
-    //     });
-    // };
-
-
+const handleSubmit = async () => {
+    if (!email.value || !username.value || !password.value) {
+        showErrorLabel('Please fill in all fields');
+        return;
+    }
 
     if (props.editMode) {
         const editUserData = {
@@ -86,8 +67,10 @@ const handleSubmit = () => {
             username: username.value,
             passwd: password.value
         };
-
-        // sendRequest('PUT', editUserData, 'Error updating user');
+        
+        await updateUser(editUserData);
+        resetForm();
+        emit('confirm');
     } else {
         const createUserData = {
             email: email.value,
@@ -95,8 +78,14 @@ const handleSubmit = () => {
             passwd: password.value
         };
 
-        // sendRequest('POST', createUserData, 'Error creating user');
+        await createUser(createUserData);
+        resetForm();
+        emit('confirm');
     }
+}
+
+const showErrorLabel = (message: string) => {
+    errorMessage.value = message;
 }
 
 onMounted(() => {

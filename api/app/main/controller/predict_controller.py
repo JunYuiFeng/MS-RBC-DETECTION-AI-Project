@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.DEBUG)
 api = predict_dto.api
 model = load_model()
 
-@api.marshal_with(predict_dto.predict_data)
+# @api.marshal_with(predict_dto.predict_data)
 @api.expect(predict_dto.parser)
 @api.doc(responses={
     200: 'Success',
@@ -26,6 +26,7 @@ model = load_model()
 })
 @api.route('/')
 class Predict(Resource):
+    
     @jwt_required()
     def post(self):
         if 'image' not in request.files:
