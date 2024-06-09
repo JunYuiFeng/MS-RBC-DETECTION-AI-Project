@@ -6,6 +6,7 @@ from flask import request, jsonify, send_file
 import numpy as np
 import torch
 from torchvision import transforms
+from app.auth_middleware import jwt_required
 from app.main.model.yolov8_model import load_model
 from ..util.dto import predict_dto
 from PIL import Image
@@ -25,6 +26,7 @@ model = load_model()
 })
 @api.route('/')
 class Predict(Resource):
+    @jwt_required
     def post(self):
         if 'image' not in request.files:
             return {'error': 'No image uploaded'}, 400
@@ -52,10 +54,13 @@ class Predict(Resource):
             buff = io.BytesIO()
             img.save(buff, format="JPEG")
             new_image_string = base64.b64encode(buff.getvalue()).decode("utf-8") 
-               
+
+            deformed_cells = int(counts[0]) if len(counts) > 0 else 0
+            healthy_cells = int(counts[1]) if len(counts) > 1 else 0
+            
             return jsonify({
-                'deformedCellsDetected': int(counts[0]),
-                'healthyCellsDetected': int(counts[1]),
+                'deformedCellsDetected': deformed_cells,
+                'healthyCellsDetected': healthy_cells,
                 'annotatedImage': new_image_string
                         })
 

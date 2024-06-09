@@ -3,7 +3,7 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import useLogin from "@/composables/useLogin";
 import { ref } from "vue";
 
-const { login, isLoading, error, user } = useLogin();
+const { login, isLoading, error } = useLogin();
 
 const email = ref("");
 const password = ref("");

@@ -37,7 +37,7 @@ class auth_service(Resource):
                 "error": str(e)
               }, 500
     return marshal({
-        "message": "Error fetching auth token!, invalid email or password",
+        "message": "Invalid email or password",
         "data": None,
         "error": "Unauthorized"
       }, auth_dto.error), 401

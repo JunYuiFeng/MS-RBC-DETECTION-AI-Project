@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import store from "@/store";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
@@ -14,11 +15,12 @@ watch(
 );
 
 const toggleButton = (button: string) => {
-  if (button === "Comparison") {
-    router.push({ name: "Comparison" });
-  } else if (button === "RBCDetection") {
-    router.push({ name: "RBCDetection" });
-  }
+  router.push({ name: button });
+};
+
+const logout = () => {
+  store.dispatch("logout");
+  location.reload();
 };
 </script>
 
@@ -49,6 +51,39 @@ const toggleButton = (button: string) => {
         @click="toggleButton('Comparison')"
       >
         RBC Image Comparison
+      </button>
+
+      <button
+        v-if="store.getters.getRole"
+        :class="[
+          'rounded-2xl p-2',
+          toggledButton === 'Admin'
+            ? 'bg-white text-black'
+            : 'bg-gray-400 text-white',
+        ]"
+        @click="toggleButton('Admin')"
+      >
+        Admin Dashboard
+      </button>
+
+      <button
+        v-if="store.getters.getToken"
+        :class="['rounded-2xl p-2 bg-red-500 text-white']"
+        @click="logout"
+      >
+        Logout
+      </button>
+      <button
+        v-else
+        :class="[
+          'rounded rounded-2xl p-2',
+          toggledButton === 'Login'
+            ? 'bg-white text-black'
+            : 'bg-gray-400 text-white',
+        ]"
+        @click="toggleButton('Login')"
+      >
+        Login
       </button>
     </div>
   </nav>
