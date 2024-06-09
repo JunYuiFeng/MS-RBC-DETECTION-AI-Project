@@ -1,4 +1,5 @@
 import { ILoginRequest } from "@/config/interfaces";
+import store from "@/store";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 // Define the API base URL (replace with your actual URL)
@@ -26,6 +27,7 @@ export default class ApiClient {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${store.getters.getToken}`,
           },
         }
       );

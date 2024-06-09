@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-10 w-1/2 rounded-3xl">
+  <div class="bg-white p-10 w-1/2 rounded-3xl mt-44">
     <div class="text-2xl flex justify-start font-black mb-3">Model Result</div>
     <CellStatistics :predictions="predictions" />
 
