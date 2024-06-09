@@ -54,7 +54,7 @@ const logout = () => {
       </button>
 
       <button
-        v-if="store.getters.getRole"
+        v-if="store.getters.getRole == 'ADMIN'"
         :class="[
           'rounded-2xl p-2',
           toggledButton === 'Admin'
