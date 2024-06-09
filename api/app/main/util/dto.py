@@ -48,6 +48,7 @@ class users_dto:
     users_schema = api.model('users_list', {
         'users': fields.List(fields.Nested(user_dto.user_full_schema))
     })
+    error = api.model('error', {**error})
 
 class predict_dto:
     api = Namespace('predict', description='Prediction operations')

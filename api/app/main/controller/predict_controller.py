@@ -26,7 +26,7 @@ model = load_model()
 })
 @api.route('/')
 class Predict(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self):
         if 'image' not in request.files:
             return {'error': 'No image uploaded'}, 400

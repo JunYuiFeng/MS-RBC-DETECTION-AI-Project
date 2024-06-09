@@ -13,9 +13,13 @@ api = users_dto.api
 
 @api.route('/')
 class get_all(Resource):
-    
-    @api.marshal_with(users_dto.users_schema, skip_none=True) 
-    @jwt_required
+
+    @jwt_required(role="ADMIN")
+    @api.marshal_with(users_dto.users_schema, skip_none=True)
+    @api.doc(
+        responses={
+            403: ('Unauthorized', users_dto.error),
+        })
     def get(self):
         """ Select all users in the database """
         try:
