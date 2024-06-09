@@ -14,14 +14,18 @@ class user_dto:
     user_id_schema = api.model('input_id_requests', {'id': fields.Integer});
     
     common = {
-        'id': fields.Integer(required=True, description='ID cannot be blank'),
         'username': fields.String(required=True, description='usename cannot be blank on insertion of a new user'),
         'email': fields.String(required=True, description='email cannot be blank on insertion of a new user'),
         'passwd': fields.String(required=True, description='password cannot be blank on insertion of a new user'),
     }
     
-    user_mod_schema =  api.model('user_mod', common) 
+    user_create_schema =  api.model('user_create', common) 
+    user_mod_schema =  api.model('user_mod', {
+        'id': fields.Integer(required=True, description='id cannot be blank on modification of a user'),
+        **common
+    }) 
     user_full_schema =  api.model('user', {
+        'id': fields.Integer(required=True, description='id cannot be blank on modification of a user'),
         **common,
         'role': fields.String(required=False, description='role of user cannot be assigned when creating a user')
     }) 

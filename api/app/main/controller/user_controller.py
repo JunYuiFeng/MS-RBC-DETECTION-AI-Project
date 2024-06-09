@@ -22,7 +22,7 @@ class user_controller(Resource):
     """ Select single user by id """
     return user_service.get_by_id(request.json["id"])
 
-  @api.expect(user_dto.user_mod_schema)
+  @api.expect(user_dto.user_create_schema)
   @api.doc(responses={
         200: 'Succes',
         401: ('Unauthorized', user_dto.error),

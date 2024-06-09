@@ -1,7 +1,6 @@
 <template>
     <div class="flex justify-center mt-10 min-h-screen bg-gradient-to-r from-violet-900 to-indigo-600">
         <div class="bg-white p-10 w-1/2 rounded-3xl">
-            
             <h1 class="text-2xl font-black pb-5">Admin Page</h1>
             <div class="flex justify-end">
                 <button @click="openCreateModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-indigo-950 text-sm rounded-xl">
@@ -38,7 +37,6 @@
     </div>
 </template>
 
-
 <script setup lang="ts">
 import UserModal from '@/components/UserModal.vue';
 import { onMounted, ref } from 'vue';
@@ -56,14 +54,14 @@ const successMessage = ref<string | null>(null);
 const { fetchUsers, users, fetchUserError } = useFetchUsers();
 const { deleteUser, deleteUserError } = useDeleteUser();
 
-const handleDeleteUser = (id: number) => {
-    deleteUser(id);
+const handleDeleteUser = async (id: number) => {
+    await deleteUser(id);
 
     if (deleteUserError.value) {
         showErrorLabel('Error deleting user');
-    }
-    else {
+    } else {
         showMessageLabel('User deleted successfully');
+        await fetchUsers();
     }
 }
 
@@ -82,18 +80,17 @@ const closeModal = () => {
     showEditModal.value = false;
 }
 
-const handleConfirm = () => {
-    fetchUsers();
+const handleConfirm = async () => {
+    await fetchUsers();
 
     if (fetchUserError.value) {
         showErrorLabel('Error fetching users');
-    }
-
-    if (showCreateModal.value == true) {
-        showMessageLabel('User created successfully');
-    }
-    else {
-        showMessageLabel('User updated successfully');
+    } else {
+        if (showCreateModal.value) {
+            showMessageLabel('User created successfully');
+        } else if (showEditModal.value) {
+            showMessageLabel('User updated successfully');
+        }
     }
 
     closeModal();
@@ -117,8 +114,8 @@ const showErrorLabel = (message: string) => {
     }, 2000);
 }
 
-onMounted(() => {
-    fetchUsers();
+onMounted(async () => {
+    await fetchUsers();
 
     if (fetchUserError.value) {
         showErrorLabel('Error fetching users');
