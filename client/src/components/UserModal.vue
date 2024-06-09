@@ -4,15 +4,15 @@
             <div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Email:</label>
-                    <input v-model="email"  type="email" class="w-full px-3 py-2 border rounded"/>
+                    <input v-model="email"  type="email" class="w-full px-3 py-2 border rounded" required/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Username:</label>
-                    <input v-model="username" type="text" class="w-full px-3 py-2 border rounded"/>
+                    <input v-model="username" type="text" class="w-full px-3 py-2 border rounded" required/>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Password:</label>
-                    <input v-model="password" type="text" class="w-full px-3 py-2 border rounded"/>
+                    <input v-model="password" type="text" class="w-full px-3 py-2 border rounded" required/>
                 </div>
                 <div class="flex justify-end gap-4">
                     <button @click="emit('close')" type="button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
@@ -25,8 +25,11 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
+import { useCreateUser } from '@/composables/useCreateUser';
 
 const emit = defineEmits(['close', 'confirm']);
+const { createUser, createUserError } = useCreateUser();
+
 
 const props = defineProps({
     editMode: {
@@ -50,29 +53,31 @@ const username = ref('username');
 const password = ref('password');
 
 const handleSubmit = () => {
-    const sendRequest = (method: 'PUT' | 'POST', userData: any, errorMessage: string) => {
-        return fetch(`http://localhost:5000/user/`, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(errorMessage);
-            }
-            return response.json();
-        })
-        .finally(() => {
-            resetForm();
-            emit('confirm');
-        })
-        .catch(error => {
-            console.error(errorMessage, error);
-            throw error;
-        });
-    };
+    // const sendRequest = (method: 'PUT' | 'POST', userData: any, errorMessage: string) => {
+    //     return fetch(`http://localhost:5000/user/`, {
+    //         method: method,
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(userData)
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error(errorMessage);
+    //         }
+    //         return response.json();
+    //     })
+    //     .finally(() => {
+    //         resetForm();
+    //         emit('confirm');
+    //     })
+    //     .catch(error => {
+    //         console.error(errorMessage, error);
+    //         throw error;
+    //     });
+    // };
+
+
 
     if (props.editMode) {
         const editUserData = {
@@ -82,7 +87,7 @@ const handleSubmit = () => {
             passwd: password.value
         };
 
-        sendRequest('PUT', editUserData, 'Error updating user');
+        // sendRequest('PUT', editUserData, 'Error updating user');
     } else {
         const createUserData = {
             email: email.value,
@@ -90,7 +95,7 @@ const handleSubmit = () => {
             passwd: password.value
         };
 
-        sendRequest('POST', createUserData, 'Error creating user');
+        // sendRequest('POST', createUserData, 'Error creating user');
     }
 }
 

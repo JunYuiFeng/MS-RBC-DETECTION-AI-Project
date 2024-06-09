@@ -15,15 +15,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in items" :key="index">
-                        <td class="p-3">{{ item.email }}</td>
-                        <td class="p-3">{{ item.username }}</td>
-                        <td class="p-3">{{ item.passwd }}</td>
+                    <tr v-for="(user, index) in users" :key="index">
+                        <td class="p-3">{{ user.email }}</td>
+                        <td class="p-3">{{ user.username }}</td>
+                        <td class="p-3">{{ user.passwd }}</td>
                         <td class="flex justify-end gap-5 pt-3 pb-3">
-                            <button @click="openEditModal(index)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-indigo-950 text-sm rounded-xl">
+                            <button @click="openEditModal(user)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-indigo-950 text-sm rounded-xl">
                                 Edit User
                             </button>
-                            <button @click="deleteUser(index)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-red-600 text-sm rounded-xl">
+                            <button @click="handleDeleteUser(user.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-red-600 text-sm rounded-xl">
                                 Delete User
                             </button>
                         </td>
@@ -42,15 +42,10 @@
 <script setup lang="ts">
 import UserModal from '@/components/UserModal.vue';
 import { onMounted, ref } from 'vue';
+import { useFetchUsers } from '@/composables/useFetchUsers';
+import { useDeleteUser } from '@/composables/useDeleteUser';
+import { User } from '@/services/api';
 
-interface User {
-    id: number;
-    email: string;
-    username: string;
-    passwd: string;
-}
-
-const items = ref<User[]>([]);
 const showCreateModal = ref(false);
 const showEditModal = ref(false);
 const headers = ['Email', 'Username', 'Password']
@@ -58,34 +53,17 @@ const selectedUser = ref<User | null>(null);
 const errorMessage = ref<string | null>(null);
 const successMessage = ref<string | null>(null);
 
-const fetchUsers = async () => {
-    try {
-        const response = await fetch('http://localhost:5000/users');
-        const data = await response.json();
-        items.value = data.users;
-    } catch (error) {
-        showErrorLabel('Error fetching users');
-    }
-}
+const { fetchUsers, users, fetchUserError } = useFetchUsers();
+const { deleteUser, deleteUserError } = useDeleteUser();
 
-const deleteUser = async (index: number) => {
-    const userToDelete = items.value[index];
-    try {
-        const response = await fetch(`http://localhost:5000/user/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: userToDelete.id })
-        });
-        if (response.ok) {
-            items.value.splice(index, 1);
-            showMessageLabel('User deleted successfully');
-        } else {
-            showErrorLabel('Failed to delete user');
-        }
-    } catch (error) {
+const handleDeleteUser = (id: number) => {
+    deleteUser(id);
+
+    if (deleteUserError.value) {
         showErrorLabel('Error deleting user');
+    }
+    else {
+        showMessageLabel('User deleted successfully');
     }
 }
 
@@ -94,8 +72,8 @@ const openCreateModal = () => {
     showCreateModal.value = true;
 }
 
-const openEditModal = (index: number) => {
-    selectedUser.value = items.value[index];
+const openEditModal = (user: User) => {
+    selectedUser.value = user;
     showEditModal.value = true;
 }
 
@@ -106,6 +84,10 @@ const closeModal = () => {
 
 const handleConfirm = () => {
     fetchUsers();
+
+    if (fetchUserError.value) {
+        showErrorLabel('Error fetching users');
+    }
 
     if (showCreateModal.value == true) {
         showMessageLabel('User created successfully');
@@ -120,6 +102,7 @@ const handleConfirm = () => {
 const showMessageLabel = (message: string) => {
     successMessage.value = message;
     errorMessage.value = null;
+
     setTimeout(() => {
         successMessage.value = null;
     }, 2000);
@@ -128,6 +111,7 @@ const showMessageLabel = (message: string) => {
 const showErrorLabel = (message: string) => {
     errorMessage.value = message;
     successMessage.value = null;
+
     setTimeout(() => {
         errorMessage.value = null;
     }, 2000);
@@ -135,8 +119,11 @@ const showErrorLabel = (message: string) => {
 
 onMounted(() => {
     fetchUsers();
-});
 
+    if (fetchUserError.value) {
+        showErrorLabel('Error fetching users');
+    }    
+});
 </script>
 
 <style scoped> 
@@ -161,5 +148,4 @@ tr {
 .fade-leave-to {
     opacity: 0;
 }
-
 </style>
