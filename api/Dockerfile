@@ -14,9 +14,18 @@ ENV PYTHONUNBUFFERED=1
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    gcc \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+# Create writable directories for Matplotlib and Ultralytics
+RUN mkdir -p /app/config/matplotlib /app/config/ultralytics
+
+# Set environment variables for Matplotlib and Ultralytics
+ENV MPLCONFIGDIR=/app/config/matplotlib
+ENV YOLO_CONFIG_DIR=/app/config/ultralytics
 
 # Create a non-privileged user that the app will run under.
 ARG UID=10001
@@ -31,10 +40,10 @@ RUN adduser \
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
-# Leverage a bind mount to requirements.txt to avoid having to copy them into
-# into this layer.
+COPY requirements.txt .
+
 RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
+    python -m pip install --upgrade pip && \
     python -m pip install -r requirements.txt
 
 # Switch to the non-privileged user to run the application.
