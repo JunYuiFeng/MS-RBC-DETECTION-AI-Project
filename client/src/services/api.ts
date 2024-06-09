@@ -15,6 +15,19 @@ export interface PredictionResponse {
   annotatedImage: ImageData;
 }
 
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  passwd: string;
+}
+
+export interface CreateUserData {
+  email: string;
+  username: string;
+  passwd: string;
+}
+
 export default class ApiClient {
   static async predict(image: File): Promise<PredictionResponse> {
     const formData = new FormData();
@@ -45,6 +58,75 @@ export default class ApiClient {
          {
           headers: {
             "Content-Type": "application/json"
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  }
+
+  static async fetchUsers(): Promise<any> {
+    try {
+      const response: AxiosResponse<User[]> = await axios.get(
+        `${API_URL}/users/`,
+        {
+          headers: {
+            "Authorization": `Bearer ${store.getters.getToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  }
+
+  static async createUser(data: CreateUserData): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.post(
+        `${API_URL}/user`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${store.getters.getToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  }
+
+  static async updateUser(data: User): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.put(
+        `${API_URL}/user/${data.id}/`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${store.getters.getToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  }
+
+  static async deleteUser(id: number): Promise<any> {
+    try {
+      const response: AxiosResponse<any> = await axios.delete(
+        `${API_URL}/user/${id}/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${store.getters.getToken}`,
           },
         }
       );
