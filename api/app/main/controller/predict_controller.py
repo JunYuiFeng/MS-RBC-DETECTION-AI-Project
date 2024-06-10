@@ -15,6 +15,11 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 import random
 
+print(torch.__version__)
+print(torch.version.cuda)
+print(torch.backends.cudnn.version())
+
+
 api = predict_dto.api
 model = load_model()
 
@@ -48,9 +53,11 @@ class Predict(Resource):
         file = request.files['image']
         image = Image.open(io.BytesIO(file.read()))
 
+
         transform = transforms.Compose([
-        transforms.Resize((640, 640)),
-        transforms.ToTensor(),  # Converts the image to a Tensor
+            transforms.Resize((640, 640)),
+            transforms.CenterCrop(640),
+            transforms.ToTensor(),  # Converts the image to a Tensor
         ])
 
         # Apply the transformations
