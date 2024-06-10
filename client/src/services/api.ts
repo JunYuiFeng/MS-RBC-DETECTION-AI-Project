@@ -136,13 +136,13 @@ export default class ApiClient {
             Authorization: `Bearer ${store.getters.getToken}`,
           },
           validateStatus: function (status) {
-            return status === 200; // Resolve only if the status code is 200
+            return status === 200; 
           },
         }
       );
-      return response.data;
+      return response;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
+      return error.response
     }
   }
 
@@ -156,11 +156,14 @@ export default class ApiClient {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${store.getters.getToken}`,
           },
+          validateStatus: function (status) {
+            return status === 200;
+          },
         }
       );
-      return response.data;
+      return response;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
+      return error.response
     }
   }
 
