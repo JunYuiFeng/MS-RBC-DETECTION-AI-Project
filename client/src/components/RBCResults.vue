@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-10 w-1/2 rounded-3xl mt-44">
+  <div class="bg-white p-10 w-1/2 rounded-3xl mb-5">
     <div class="text-2xl flex justify-start font-black mb-3">Model Result</div>
     <CellStatistics :predictions="predictions" />
 
@@ -52,7 +52,7 @@ const dataPie = {
   labels: ["Deformed", "Healthy"],
   datasets: [
     {
-      data: [300, 50],
+      data: [props.predictions.deformedCellsDetected, props.predictions.healthyCellsDetected],
       backgroundColor: ["rgb(0,128,0)", "rgb(164, 101, 241)"],
       hoverOffset: 4,
     },
@@ -82,7 +82,7 @@ const dataBar = {
   datasets: [
     {
       label: "Cell Count",
-      data: [300, 50],
+      data: [props.predictions.deformedCellsDetected, props.predictions.healthyCellsDetected],
       backgroundColor: ["rgb(0,128,0)", "rgb(164, 101, 241)"],
       hoverOffset: 4,
     },

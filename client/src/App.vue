@@ -14,7 +14,7 @@ import NavBar from "./components/NavBar.vue";
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100vh;
+  min-height: 100vh;
   @apply bg-gradient-to-r from-violet-900 to-indigo-600;
 }
 </style>

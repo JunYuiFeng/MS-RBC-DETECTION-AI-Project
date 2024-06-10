@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-center h-full"
+    class="flex items-center justify-center h-full mt-14"
   >
     <RBCResults v-if="prediction" :predictions="prediction" />
 
