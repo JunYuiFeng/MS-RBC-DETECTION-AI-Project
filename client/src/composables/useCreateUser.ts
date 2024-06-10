@@ -22,12 +22,12 @@ export function useCreateUser() {
     }
 
     createUserError.value = null; // Reset error message
+    const response = await ApiService.createUser(createUserData);
 
-    try {
-      await ApiService.createUser(createUserData);
-    } catch (err: any) {
-      // Handle any other errors (network issues, etc.)
-      createUserError.value = err.message || 'Failed to create user';
+    if (response.status !== 200) {
+      createUserError.value = response?.data?.error;
+    } else {
+      return
     }
   };
 
