@@ -56,8 +56,12 @@ class Predict(Resource):
             img.save(buff, format="JPEG")
             new_image_string = base64.b64encode(buff.getvalue()).decode("utf-8") 
 
-            deformed_cells = int(counts[0]) if len(counts) > 0 else 0
-            healthy_cells = int(counts[1]) if len(counts) > 1 else 0
+            deformed_cells = 0
+            healthy_cells =  0
+            if len(counts) > 0:
+                deformed_cells = int(counts[0])
+            if len(counts) > 1:
+                healthy_cells = int(counts[1])
             
             return jsonify({
                 'deformedCellsDetected': deformed_cells,
