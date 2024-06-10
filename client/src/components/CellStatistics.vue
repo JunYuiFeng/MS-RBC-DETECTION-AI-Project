@@ -30,12 +30,12 @@
 
       <div>
         <div class="flex justify-start"><b>Healthy Cells Percentage</b></div>
-        <div class="flex justify-start font-black text-green-600">N/A</div>
+        <div class="flex justify-start font-black text-green-600">{{ ((props.predictions.healthyCellsDetected * 100) / (props.predictions.deformedCellsDetected+props.predictions.healthyCellsDetected)).toFixed(2) + "%" }}</div>
       </div>
 
       <div>
         <div class="flex justify-start"><b>Deformed Cells Percentage</b></div>
-        <div class="flex justify-start font-black text-violet-700">N/A</div>
+        <div class="flex justify-start font-black text-violet-700">{{ ((props.predictions.deformedCellsDetected * 100) / (props.predictions.deformedCellsDetected+props.predictions.healthyCellsDetected)).toFixed(2) + "%" }}</div>
       </div>
     </div>
   </div>
