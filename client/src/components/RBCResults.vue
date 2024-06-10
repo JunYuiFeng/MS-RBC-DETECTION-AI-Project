@@ -53,7 +53,7 @@ const dataPie = {
   datasets: [
     {
       data: [props.predictions.deformedCellsDetected, props.predictions.healthyCellsDetected],
-      backgroundColor: ["rgb(0,128,0)", "rgb(164, 101, 241)"],
+      backgroundColor: ["rgb(164, 101, 241)", "rgb(0,128,0)"],
       hoverOffset: 4,
     },
   ],
@@ -83,7 +83,7 @@ const dataBar = {
     {
       label: "Cell Count",
       data: [props.predictions.deformedCellsDetected, props.predictions.healthyCellsDetected],
-      backgroundColor: ["rgb(0,128,0)", "rgb(164, 101, 241)"],
+      backgroundColor: ["rgb(164, 101, 241)", "rgb(0,128,0)"],
       hoverOffset: 4,
     },
   ],
