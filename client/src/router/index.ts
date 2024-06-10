@@ -64,12 +64,18 @@ const router = createRouter({
   routes,
 });
 
+// Define the beforeEach navigation guard
 router.beforeEach((to, from, next) => {
   const role = store.getters.getRole;
 
+  // If the user is authenticated and trying to access the login page
+  if (role && to.name === 'Login') {
+    return next({ name: 'RBCDetection' });
+  }
+
   if (to.meta.authRequired) {
     if (!role) {
-      // If user is not authenticated, redirect to Login
+      // If user is not authenticated, redirect to Unauthorized
       return next({ name: 'Unauthorized' });
     }
 
