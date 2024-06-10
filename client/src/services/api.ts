@@ -31,7 +31,7 @@ export interface CreateUserData {
 export default class ApiClient {
   static async predict(image: File): Promise<PredictionResponse> {
     const formData = new FormData();
-    formData.append("image", image);
+    formData.append('image', image);
 
     try {
       const response: AxiosResponse<PredictionResponse> = await axios.post(
@@ -39,25 +39,25 @@ export default class ApiClient {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${store.getters.getToken}`,
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${store.getters.getToken}`,
           },
         }
       );
       return response.data;
     } catch (error) {
-      throw new Error("Error predicting image: " + error);
+      throw new Error('Error predicting image: ' + error);
     }
   }
 
-  static async login(data: ILoginRequest,): Promise<any> {
+  static async login(data: ILoginRequest): Promise<any> {
     try {
       const response: AxiosResponse<PredictionResponse> = await axios.post(
         `${API_URL}/auth/`,
         data,
-         {
+        {
           headers: {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -73,7 +73,7 @@ export default class ApiClient {
         `${API_URL}/users/`,
         {
           headers: {
-            "Authorization": `Bearer ${store.getters.getToken}`,
+            Authorization: `Bearer ${store.getters.getToken}`,
           },
         }
       );
@@ -90,14 +90,18 @@ export default class ApiClient {
         data,
         {
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${store.getters.getToken}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${store.getters.getToken}`,
+          },
+          validateStatus: function (status) {
+            return status === 200; // Resolve only if the status code is 200
           },
         }
       );
-      return response.data;
+  
+      return response;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      return error.response
     }
   }
 
@@ -108,8 +112,8 @@ export default class ApiClient {
         data,
         {
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${store.getters.getToken}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${store.getters.getToken}`,
           },
         }
       );
@@ -125,8 +129,8 @@ export default class ApiClient {
         `${API_URL}/user/`,
         {
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${store.getters.getToken}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${store.getters.getToken}`,
           },
           data: {
             id,

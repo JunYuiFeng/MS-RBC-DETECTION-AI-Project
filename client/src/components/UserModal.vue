@@ -54,13 +54,26 @@ const resetForm = () => {
     password.value = '';
 };
 
+
+const validateEmail = (email: string) => {
+    const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
+    return isValid;
+};
+
+
 const handleSubmit = async () => {
     if (!email.value || !username.value || !password.value) {
         showErrorLabel('Please fill in all fields');
         return;
     }
 
+    if (!validateEmail(email.value)) {
+        showErrorLabel('Please enter a valid email address');
+        return;
+    }
+
     if (props.editMode) {
+        
         const editUserData = {
             id: props.user.id,
             email: email.value,
@@ -79,12 +92,16 @@ const handleSubmit = async () => {
         };
 
         await createUser(createUserData);
-        resetForm();
-        emit('confirm');
+
+        if (!createUserError.value) {
+            resetForm();
+            emit('confirm');
+        }
+        showErrorLabel(createUserError.value)
     }
 }
 
-const showErrorLabel = (message: string) => {
+const showErrorLabel = (message: any) => {
     errorMessage.value = message;
 }
 
