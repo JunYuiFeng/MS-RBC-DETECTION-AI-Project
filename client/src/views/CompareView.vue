@@ -10,8 +10,8 @@
       </div>
       <div>
         <div class="flex items-center gap-5 justify-center w-full">
-          <DropFile :multiple="true" />
-          <DropFile :multiple="true" />
+          <DropFile :multiple="true" @fileSelected="handlePatient1SelectedFiles" inputName="input1"/>
+          <DropFile :multiple="true" @fileSelected="handlePatient2SelectedFiles" inputName="input2"/>
         </div>
       </div>
       <div class="flex justify-center pt-10">
@@ -27,12 +27,24 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "/src/components/NavBar.vue";
 import DropFile from "/src/components/DropFile.vue";
 import RBCComapredResults from "/src/components/RBCComparedResults.vue";
 import { ref } from "vue";
 
 const showRBCResults = ref(false);
+const patient1 = ref<FileList | null>(null)
+const patient2 = ref<FileList | null>(null)
+
+const handlePatient1SelectedFiles = (files: FileList | null) => {
+  if (files && files.length > 0) {
+   patient1.value = files;
+  }
+};
+const handlePatient2SelectedFiles = (files: FileList | null) => {
+  if (files && files.length > 0) {
+   patient2.value = files;
+  }
+};
 
 const detect = () => {
   showRBCResults.value = true;

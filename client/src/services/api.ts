@@ -5,14 +5,10 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 // Define the API base URL (replace with your actual URL)
 const API_URL = "http://127.0.0.1:5001";
 
-interface ImageData {
-  data: string; // Base64 encoded image data
-}
-
 export interface PredictionResponse {
   deformedCellsDetected: number;
   healthyCellsDetected: number;
-  annotatedImage: ImageData;
+  annotatedImage: string;
 }
 
 export interface ComparisonResponse {
