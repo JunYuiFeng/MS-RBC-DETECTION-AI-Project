@@ -21,7 +21,7 @@ export default function useLogin() {
         token: response.data.token,
         role: response.data.user.role,
       });
-      router.push("/")
+      router.push("/detect")
     } catch (err: any) {
       error.value =
         err.message ?? "Credentials are incorrect. Please try again";

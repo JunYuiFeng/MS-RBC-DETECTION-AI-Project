@@ -1,34 +1,33 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import store from '@/store';
-// import HomeView from '../views/HomeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
+    name: 'Login',
+    component: () => import('../views/LoginView.vue'),
+    meta: {
+      authRequired: false,
+      adminRequired: false,
+    },
+  },
+  {
+    path: '/detect',
     name: 'RBCDetection',
     component: () => import('../views/RBCDetection.vue'),
     meta: {
-      authRequired: false,
+      authRequired: true,
+      adminRequired: false,
     },
   },
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
     meta: {
-      authRequired: false,
-    },
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/LoginView.vue'),
-    meta: {
-      authRequired: false,
+      authRequired: true,
+      adminRequired: false,
     },
   },
   {
@@ -36,7 +35,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Comparison',
     component: () => import('../views/CompareView.vue'),
     meta: {
-      authRequired: false,
+      authRequired: true,
+      adminRequired: false,
     },
   },
   {
@@ -45,40 +45,42 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/AdminView.vue'),
     meta: {
       authRequired: true,
+      adminRequired: true,
     },
   },
   {
-    path: '/',
+    path: '/404',
     name: 'Unauthorized',
     component: () => import('../views/UnauthorizedView.vue'),
     meta: {
       authRequired: false,
+      adminRequired: false,
     },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
-
-
-router.beforeEach((to, from, next) => {
-  //check page protection
-  if (to.meta.authRequired) {
-    //get contact's id
-    const role = store.getters.getRole
-    //access check
-    if (role === 'ADMIN') {
-      return next();
-    } else {
-      router.push({
-        name: 'Unauthorized',
-      });
-    }
-  } else {
-    return next();
-  }
+  routes,
 });
 
-export default router
+router.beforeEach((to, from, next) => {
+  const role = store.getters.getRole;
+
+  if (to.meta.authRequired) {
+    if (!role) {
+      // If user is not authenticated, redirect to Login
+      return next({ name: 'Unauthorized' });
+    }
+
+    if (to.meta.adminRequired && role !== 'ADMIN') {
+      // If the route requires admin access and the user is not an admin
+      return next({ name: 'Unauthorized' });
+    }
+  }
+
+  // For routes that don't require authentication or if user has proper access
+  return next();
+});
+
+export default router;

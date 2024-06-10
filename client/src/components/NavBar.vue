@@ -20,7 +20,7 @@ const toggleButton = (button: string) => {
 
 const logout = () => {
   store.dispatch("logout");
-  location.reload();
+  router.push('/')
 };
 </script>
 
@@ -31,6 +31,7 @@ const logout = () => {
     </router-link>
     <div class="text-white flex space-x-2">
       <button
+        v-if="store.getters.getRole"
         :class="[
           'rounded rounded-2xl p-2',
           toggledButton === 'RBCDetection'
@@ -42,6 +43,7 @@ const logout = () => {
         RBC Detection
       </button>
       <button
+        v-if="store.getters.getRole"
         :class="[
           'rounded rounded-2xl p-2',
           toggledButton === 'Comparison'
