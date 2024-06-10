@@ -13,9 +13,22 @@ from PIL import Image
 import io
 import logging
 logging.basicConfig(level=logging.DEBUG)
+import random
 
 api = predict_dto.api
 model = load_model()
+
+
+
+seed = 42
+random.seed(seed)
+np.random.seed(seed)
+torch.manual_seed(seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 # @api.marshal_with(predict_dto.predict_data)
 @api.expect(predict_dto.parser)
@@ -26,7 +39,7 @@ model = load_model()
 })
 @api.route('/')
 class Predict(Resource):
-    
+
     @jwt_required()
     def post(self):
         if 'image' not in request.files:
@@ -36,10 +49,10 @@ class Predict(Resource):
         image = Image.open(io.BytesIO(file.read()))
 
         transform = transforms.Compose([
-        transforms.Resize((640, 640)),  
+        transforms.Resize((640, 640)),
         transforms.ToTensor(),  # Converts the image to a Tensor
         ])
-    
+
         # Apply the transformations
         image = transform(image).unsqueeze(0)  # Add batch dimension
         image = image.float()
@@ -71,4 +84,3 @@ class Predict(Resource):
                 'annotatedImage': new_image_string
             })
             return response
-
