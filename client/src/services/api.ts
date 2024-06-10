@@ -3,16 +3,25 @@ import store from "@/store";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 // Define the API base URL (replace with your actual URL)
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "http://127.0.0.1:5001";
 
 interface ImageData {
   data: string; // Base64 encoded image data
 }
 
 export interface PredictionResponse {
-  "Deformed cells detected": number;
-  "Healthy cells detected": number;
+  deformedCellsDetected: number;
+  healthyCellsDetected: number;
   annotatedImage: ImageData;
+}
+
+export interface ComparisonResponse {
+  patient1: PredictionResponse[];
+  patient2: PredictionResponse[];
+  comparison: {
+    deformedCellsDifference: number;
+    healthyCellsDifference: number;
+  };
 }
 
 export interface User {
@@ -46,13 +55,42 @@ export default class ApiClient {
       );
       return response.data;
     } catch (error) {
-      throw new Error('Error predicting image: ' + error);
+      throw new Error('Error predicting image: ' + (error as AxiosError).message);
+    }
+  }
+
+  static async compare(
+    patient1Images: File[],
+    patient2Images: File[]
+  ): Promise<ComparisonResponse> {
+    const formData = new FormData();
+    patient1Images.forEach((image, index) => {
+      formData.append('patient1_images', image, `patient1_image${index + 1}`);
+    });
+    patient2Images.forEach((image, index) => {
+      formData.append('patient2_images', image, `patient2_image${index + 1}`);
+    });
+
+    try {
+      const response: AxiosResponse<ComparisonResponse> = await axios.post(
+        `${API_URL}/compare/`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${store.getters.getToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Error comparing images: ' + (error as AxiosError).message);
     }
   }
 
   static async login(data: ILoginRequest): Promise<any> {
     try {
-      const response: AxiosResponse<PredictionResponse> = await axios.post(
+      const response: AxiosResponse<any> = await axios.post(
         `${API_URL}/auth/`,
         data,
         {
@@ -63,11 +101,11 @@ export default class ApiClient {
       );
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message ?? error);
+      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
     }
   }
 
-  static async fetchUsers(): Promise<any> {
+  static async fetchUsers(): Promise<User[]> {
     try {
       const response: AxiosResponse<User[]> = await axios.get(
         `${API_URL}/users/`,
@@ -79,7 +117,7 @@ export default class ApiClient {
       );
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
     }
   }
 
@@ -98,10 +136,9 @@ export default class ApiClient {
           },
         }
       );
-  
-      return response;
+      return response.data;
     } catch (error: any) {
-      return error.response
+      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
     }
   }
 
@@ -119,7 +156,7 @@ export default class ApiClient {
       );
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
     }
   }
 
@@ -139,7 +176,7 @@ export default class ApiClient {
       );
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message ?? (error as AxiosError).message);
     }
   }
 }

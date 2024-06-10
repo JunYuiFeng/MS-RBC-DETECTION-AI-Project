@@ -64,4 +64,15 @@ class predict_dto:
         'healthyCellsDetected': fields.Integer,
         'annotatedImage': fields.String
     })
+
+class comparepredict_dto:
+    api = Namespace('compare', description='Comparison operations')
+    parser = api.parser()
+    parser.add_argument('patient1_images', location='files', type=FileStorage, required=True, action='append', help='Images of Patient 1')
+    parser.add_argument('patient2_images', location='files', type=FileStorage, required=True, action='append', help='Images of Patient 2')
+    compare_data = api.model('compare_data', {
+        'patient1': fields.Raw,
+        'patient2': fields.Raw,
+        'comparison': fields.Raw
+    })
     
