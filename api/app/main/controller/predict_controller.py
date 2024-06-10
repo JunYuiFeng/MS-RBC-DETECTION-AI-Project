@@ -48,24 +48,27 @@ class Predict(Resource):
 
         for result in results:
             boxes = result.boxes  # Boxes object for bounding box outputs
-            unique, counts = np.unique(boxes.cls.numpy(), return_counts=True)
-            annotated_image = result.plot()  # Get the annotated image as NumPy array
+
+            # Move the tensor to the CPU and convert to numpy
+            unique, counts = np.unique(boxes.cls.cpu().numpy(), return_counts=True)
+            annotated_image = result.plot(labels=False)  # Get the annotated image as NumPy array
 
             img = Image.fromarray(annotated_image.astype('uint8'))
             buff = io.BytesIO()
             img.save(buff, format="JPEG")
-            new_image_string = base64.b64encode(buff.getvalue()).decode("utf-8") 
+            new_image_string = base64.b64encode(buff.getvalue()).decode("utf-8")
 
             deformed_cells = 0
-            healthy_cells =  0
+            healthy_cells = 0
             if len(counts) > 0:
                 deformed_cells = int(counts[0])
             if len(counts) > 1:
                 healthy_cells = int(counts[1])
-            
-            return jsonify({
+
+            response = jsonify({
                 'deformedCellsDetected': deformed_cells,
                 'healthyCellsDetected': healthy_cells,
                 'annotatedImage': new_image_string
-                        })
+            })
+            return response
 
