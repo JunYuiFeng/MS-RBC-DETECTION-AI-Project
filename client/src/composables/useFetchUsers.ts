@@ -1,15 +1,16 @@
 import { ref } from "vue";
 import ApiClient from "@/services/api";
  
-interface User {
+interface UserResponse {
   id: number;
-  email: string;
   username: string;
+  email: string;
   passwd: string;
+  role: string;
 }
 
 export function useFetchUsers() {
-  const users = ref<User[]>([]);
+  const users = ref<UserResponse[]>([]);
   const fetchUserError = ref<string | null>(null);
 
   const fetchUsers = async () => {
@@ -18,7 +19,6 @@ export function useFetchUsers() {
     try {
       const response = await ApiClient.fetchUsers();
       users.value = response.users;
-      console.log(users.value);
     } catch (err: any) {
       fetchUserError.value = err.message;
     } 

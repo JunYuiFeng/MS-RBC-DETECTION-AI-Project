@@ -3,7 +3,7 @@ import store from "@/store";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 // Define the API base URL (replace with your actual URL)
-const API_URL = "http://127.0.0.1:5001";
+const API_URL = "http://127.0.0.1:5000";
 
 export interface PredictionResponse {
   deformedCellsDetected: number;
@@ -25,6 +25,14 @@ export interface User {
   email: string;
   username: string;
   passwd: string;
+}
+
+export interface UserResponse {
+  id: number;
+  email: string;
+  username: string;
+  passwd: string;
+  role: string;
 }
 
 export interface CreateUserData {
@@ -101,9 +109,9 @@ export default class ApiClient {
     }
   }
 
-  static async fetchUsers(): Promise<User[]> {
+  static async fetchUsers(): Promise<any> {
     try {
-      const response: AxiosResponse<User[]> = await axios.get(
+      const response: AxiosResponse<any> = await axios.get(
         `${API_URL}/users/`,
         {
           headers: {
