@@ -27,27 +27,29 @@
 </template>
 
 <script setup lang="ts">
+import ApiClient from "@/services/api";
 import DropFile from "/src/components/DropFile.vue";
 import RBCComapredResults from "/src/components/RBCComparedResults.vue";
 import { ref } from "vue";
 
 const showRBCResults = ref(false);
-const patient1 = ref<FileList | null>(null)
-const patient2 = ref<FileList | null>(null)
+const patient1 = ref<File[] | null>(null)
+const patient2 = ref<File[] | null>(null)
 
 const handlePatient1SelectedFiles = (files: FileList | null) => {
   if (files && files.length > 0) {
-   patient1.value = files;
+   patient1.value = Array.from(files);
   }
 };
 const handlePatient2SelectedFiles = (files: FileList | null) => {
   if (files && files.length > 0) {
-   patient2.value = files;
+   patient2.value = Array.from(files);
   }
 };
 
 const detect = () => {
-  showRBCResults.value = true;
+  if(!patient1.value || !patient2.value) return 
+  ApiClient.compare(patient1.value, patient2.value)
 };
 </script>
 
