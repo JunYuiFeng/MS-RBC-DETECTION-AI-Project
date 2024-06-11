@@ -28,6 +28,7 @@
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
 import { useCreateUser } from '@/composables/useCreateUser';
 import { useUpdateUser } from '@/composables/useUpdateUser';
+import { useFetchUsers } from '@/composables/useFetchUsers';
 
 const email = ref('email');
 const username = ref('username');
@@ -35,6 +36,7 @@ const password = ref('password');
 const emit = defineEmits(['close', 'confirm']);
 const { createUser, createUserError } = useCreateUser();
 const { updateUser, updateUserError } = useUpdateUser();
+const { fetchUsers, users, fetchUserError } = useFetchUsers();
 const errorMessage = ref<string | null>(null);
 
 const props = defineProps({
@@ -73,22 +75,50 @@ const handleSubmit = async () => {
     }
 
     if (props.editMode) {
-        
+        // Check for duplicates excluding the current user
+        for (const user of users.value) {
+            if (user.id !== props.user.id) {
+                if (user.email === email.value) {
+                    showErrorLabel('Email already exists');
+                    return;
+                }
+
+                if (user.username === username.value) {
+                    showErrorLabel('Username already exists');
+                    return;
+                }
+            }
+        }
+
         const editUserData = {
             id: props.user.id,
             email: email.value,
             username: username.value,
             passwd: password.value
         };
-        
+
         await updateUser(editUserData);
 
         if (!updateUserError.value) {
             resetForm();
             emit('confirm');
+        } else {
+            showErrorLabel(updateUserError.value);
         }
-        showErrorLabel(updateUserError.value)
     } else {
+
+        for (const user of users.value) {
+            if (user.email === email.value) {
+                showErrorLabel('Email already exists');
+                return;
+            }
+
+            if (user.username === username.value) {
+                showErrorLabel('Username already exists');
+                return;
+            }
+        }
+
         const createUserData = {
             email: email.value,
             username: username.value,
@@ -100,8 +130,9 @@ const handleSubmit = async () => {
         if (!createUserError.value) {
             resetForm();
             emit('confirm');
+        } else {
+            showErrorLabel(createUserError.value);
         }
-        showErrorLabel(createUserError.value)
     }
 }
 
@@ -116,6 +147,11 @@ onMounted(() => {
         password.value = props.user.passwd;
     } else {
         resetForm();
+    }
+
+    fetchUsers();
+    if (fetchUserError.value) {
+        showErrorLabel('Error fetching users');
     }
 });
 </script>
