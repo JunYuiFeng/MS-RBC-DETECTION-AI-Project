@@ -1,8 +1,14 @@
 <template>
   <div class="grid grid-cols-12 gap-5">
-    <!-- Use the carousel component -->
+    <!-- Conditional rendering of carousel or single image -->
     <div class="col-span-5">
-      <CarouselComponent :images="props.predictions.annotatedImages || [props.predictions.annotatedImage]" />
+      <div v-if="props.comparedResultsPage">
+        <CarouselComponent v-if="props.predictions.annotatedImages" :images="props.predictions.annotatedImages" />
+        <img v-else :src="`data:image/jpg;base64,${props.predictions.annotatedImage}`" alt="blood smear example" class="rounded-lg w-full" />
+      </div>
+      <div v-else>
+        <img :src="`data:image/jpg;base64,${props.predictions.annotatedImage}`" alt="blood smear example" class="rounded-lg w-full" />
+      </div>
     </div>
 
     <div
@@ -35,14 +41,14 @@
       <div>
         <div class="flex justify-start"><b>Healthy Cells Percentage</b></div>
         <div class="flex justify-start font-black text-green-600">
-          {{ ((props.predictions.healthyCellsDetected * 100) / (props.predictions.deformedCellsDetected + props.predictions.healthyCellsDetected)).toFixed(2) + "%" }}
+          {{ Math.round((props.predictions.healthyCellsDetected * 100) / (props.predictions.deformedCellsDetected + props.predictions.healthyCellsDetected)) }}%
         </div>
       </div>
 
       <div>
         <div class="flex justify-start"><b>Deformed Cells Percentage</b></div>
         <div class="flex justify-start font-black text-violet-700">
-          {{ ((props.predictions.deformedCellsDetected * 100) / (props.predictions.deformedCellsDetected + props.predictions.healthyCellsDetected)).toFixed(2) + "%" }}
+          {{ Math.round((props.predictions.deformedCellsDetected * 100) / (props.predictions.deformedCellsDetected + props.predictions.healthyCellsDetected)) }}%
         </div>
       </div>
     </div>
@@ -51,7 +57,7 @@
 
 <script setup lang="ts">
 import { defineProps } from "vue";
-import CarouselComponent from './CarouselComponent.vue';
+import CarouselComponent from './CarouselComponent.vue'; // Ensure you have this component imported
 
 const props = defineProps<{
   predictions: any;
