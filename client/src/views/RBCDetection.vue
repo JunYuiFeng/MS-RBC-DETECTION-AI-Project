@@ -1,7 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-center h-full mt-14"
-  >
+  class="flex items-center justify-center min-h-screen bg-gradient-to-r from-violet-900 to-indigo-600">
     <RBCResults v-if="prediction" :predictions="prediction" />
 
     <div v-else class="bg-white p-10 w-1/2 rounded-3xl">
@@ -28,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "/src/components/NavBar.vue";
 import DropFile from "/src/components/DropFile.vue";
 import RBCResults from "/src/components/RBCResults.vue";
 import { ref } from "vue";

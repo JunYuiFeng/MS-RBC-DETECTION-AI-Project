@@ -29,8 +29,8 @@ class user_service(Resource):
      
   @staticmethod
   def modify_user(id: int, username: str, email: str, passwd: str):
-    query_db("UPDATE users SET username = ?, email = ?, passwd = ? WHERE id = ?", [username, email, passwd, id], mod=True)
-    return user_service.get_by_id(id)
+    res = query_db("UPDATE users SET username = ?, email = ?, passwd = ? WHERE id = ?", [username, email, passwd, id], mod=True)
+    return res
     
   @staticmethod
   def delete_by_id(id: int):

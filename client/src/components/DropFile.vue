@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col flex-1">
     <label
-      for="dropzone-file"
+      :for='"dropzone-file-" + inputName'
       class="flex flex-col items-center justify-center w-full h-64 border-2 border-violet-900 border-dashed rounded-lg cursor-pointer bg-white"
     >
       <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -28,7 +28,8 @@
         </p>
       </div>
       <input
-        id="dropzone-file"
+        :name="inputName"
+        :id='"dropzone-file-" + inputName'
         type="file"
         class="hidden"
         :multiple="multiple"
@@ -36,27 +37,39 @@
         @change="handleFileChange"
       />
     </label>
-    <p class="">0 files selected</p>
+    <p>{{ fileCount }} files selected</p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref } from "vue";
 
 defineProps({
   multiple: {
     type: Boolean,
     default: false,
   },
+  inputName: {
+    type: String,
+    default: "input"
+  }
 });
 
 const emit = defineEmits<{
   (event: "fileSelected", files: FileList | null): void;
 }>();
 
+const fileCount = ref(0);
+
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  emit("fileSelected", target.files);
+  const files = target.files;
+  if (files) {
+    fileCount.value = files.length;
+    emit("fileSelected", files);
+  } else {
+    fileCount.value = 0;
+  }
 };
 </script>
 

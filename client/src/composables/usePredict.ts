@@ -1,11 +1,6 @@
 import { ref, computed } from 'vue';
-import ApiService from '@/services/api';
+import ApiService, { PredictionResponse } from '@/services/api';
 
-interface PredictionResponse {
-  'Deformed cells detected': number;
-  'Healthy cells detected': number;
-  annotatedImage: { data: string }; // Base64 encoded image data
-}
 
 export default function usePredict() {
   const prediction = ref<PredictionResponse | null>(null);
