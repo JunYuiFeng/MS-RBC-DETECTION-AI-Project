@@ -36,7 +36,6 @@ class user_controller(Resource):
 
     @jwt_required(role="ADMIN")
     @api.expect(user_dto.user_mod_schema)
-    @api.marshal_with(user_dto.user_full_schema)
     @api.doc(responses={
           401: ('Unauthorized', user_dto.error),
           500: ('Internal Server error', user_dto.error)

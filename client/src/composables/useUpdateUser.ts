@@ -18,10 +18,18 @@ export function useUpdateUser() {
         }
 
         updateUserError.value = null;
-        try {
-        await ApiService.updateUser(user);
-        } catch (err: any) {
-            updateUserError.value = err.message ?? 'Failed to update user';
+
+        const response = await ApiService.updateUser(user);
+        // console.log(response.data);
+        
+        if (response.status !== 200) {
+            // console.log(response.data);
+            
+            updateUserError.value = response.data.error;
+            console.log(updateUserError.value);
+            
+        } else {
+          return;
         }
     };
     

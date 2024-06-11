@@ -82,8 +82,12 @@ const handleSubmit = async () => {
         };
         
         await updateUser(editUserData);
-        resetForm();
-        emit('confirm');
+
+        if (!updateUserError.value) {
+            resetForm();
+            emit('confirm');
+        }
+        showErrorLabel(updateUserError.value)
     } else {
         const createUserData = {
             email: email.value,
