@@ -14,13 +14,7 @@
       </div>
       <div v-if="error" class="text-red-500 mt-3">{{ error }}</div>
       <div class="flex justify-center mt-3">
-        <button
-          class="hover:bg-blue-700 text-white font-bold py-2 px-4 bg-indigo-950 text-sm rounded-xl transition-all"
-          @click="detect"
-        >
-          {{ !isLoading ? "Detect RBC" : "" }}
-          <LoadingSpinner v-if="isLoading" />
-        </button>
+        <LoadingSpinner v-if="isLoading" />
       </div>
     </div>
   </div>
@@ -29,14 +23,11 @@
 <script setup lang="ts">
 import DropFile from "/src/components/DropFile.vue";
 import RBCResults from "/src/components/RBCResults.vue";
-import { ref } from "vue";
 import usePredict from "@/composables/usePredict";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 const { prediction, isLoading, error, predictImage, hasPrediction } =
   usePredict();
-
-const showRBCResults = ref(false);
 
 const handleSelectedFile = (files: FileList | null) => {
   if (files && files.length > 0) {
@@ -45,9 +36,6 @@ const handleSelectedFile = (files: FileList | null) => {
   }
 };
 
-const detect = () => {
-  showRBCResults.value = true;
-};
 </script>
 
 <style scoped></style>

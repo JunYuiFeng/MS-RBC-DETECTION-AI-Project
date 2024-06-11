@@ -69,7 +69,7 @@ class Compare(Resource):
 
         transform = transforms.Compose([
             transforms.Resize((640, 640)),
-            transforms.CenterCrop(640),
+            transforms.Lambda(lambda img: img.rotate(-90)),
             transforms.ToTensor(),  # Converts the image to a Tensor
         ])
 
