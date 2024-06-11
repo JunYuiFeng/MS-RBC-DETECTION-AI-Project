@@ -3,6 +3,9 @@
     <label
       :for='"dropzone-file-" + inputName'
       class="flex flex-col items-center justify-center w-full h-64 border-2 border-violet-900 border-dashed rounded-lg cursor-pointer bg-white"
+      @dragover.prevent="handleDragOver"
+      @dragleave="handleDragLeave"
+      @drop.prevent="handleDrop"
     >
       <div class="flex flex-col items-center justify-center pt-5 pb-6">
         <svg
@@ -44,14 +47,14 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, ref } from "vue";
 
-defineProps({
+const props = defineProps({
   multiple: {
     type: Boolean,
     default: false,
   },
   inputName: {
     type: String,
-    default: "input"
+    default: "input",
   }
 });
 
@@ -67,6 +70,30 @@ const handleFileChange = (event: Event) => {
   if (files) {
     fileCount.value = files.length;
     emit("fileSelected", files);
+  } else {
+    fileCount.value = 0;
+  }
+};
+
+const handleDragOver = (event: DragEvent) => {
+  event.preventDefault();
+};
+
+const handleDragLeave = (event: DragEvent) => {
+  event.preventDefault();
+};
+
+const handleDrop = (event: DragEvent) => {
+  const files = event.dataTransfer?.files;
+  if (files) {
+    fileCount.value = files.length;
+    emit("fileSelected", files);
+    const inputElement = document.getElementById(`dropzone-file-${props.inputName}`) as HTMLInputElement;
+    if (inputElement) {
+      const dataTransfer = new DataTransfer();
+      Array.from(files).forEach(file => dataTransfer.items.add(file));
+      inputElement.files = dataTransfer.files;
+    }
   } else {
     fileCount.value = 0;
   }
