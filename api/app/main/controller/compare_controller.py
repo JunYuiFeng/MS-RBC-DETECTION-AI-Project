@@ -78,7 +78,7 @@ class Compare(Resource):
             image = transform(image).unsqueeze(0)  # Add batch dimension
             image = image.float()
 
-            results = model(image, conf=0.6)
+            results = model(image, conf=0.6, max_det=600)
 
             for result in results:
                 boxes = result.boxes  # Boxes object for bounding box outputs
