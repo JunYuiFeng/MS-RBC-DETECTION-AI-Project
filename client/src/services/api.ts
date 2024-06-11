@@ -11,9 +11,13 @@ export interface PredictionResponse {
   annotatedImage: string;
 }
 
+export interface MultiplePredictionResponse extends Omit<PredictionResponse, 'annotatedImage'> {
+  annotatedImages: string[];
+}
+
 export interface ComparisonResponse {
-  patient1: PredictionResponse[];
-  patient2: PredictionResponse[];
+  patient1: MultiplePredictionResponse;
+  patient2: MultiplePredictionResponse; 
   comparison: {
     deformedCellsDifference: number;
     healthyCellsDifference: number;
