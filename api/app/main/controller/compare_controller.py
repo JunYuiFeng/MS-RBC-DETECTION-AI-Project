@@ -3,7 +3,6 @@ import base64
 from flask_restx import Namespace, Resource
 from flask import request, jsonify
 import numpy as np
-import torch
 from torchvision import transforms
 from app.auth_middleware import jwt_required
 from app.main.model.yolov8_model import load_model
@@ -12,24 +11,9 @@ from PIL import Image
 import io
 import logging
 logging.basicConfig(level=logging.DEBUG)
-import random
-
-print(torch.__version__)
-print(torch.version.cuda)
-print(torch.backends.cudnn.version())
 
 compare_api = comparepredict_dto.api
 model = load_model()
-
-seed = 42
-random.seed(seed)
-np.random.seed(seed)
-torch.manual_seed(seed)
-if torch.cuda.is_available():
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
 
 @compare_api.route('/')
 class Compare(Resource):

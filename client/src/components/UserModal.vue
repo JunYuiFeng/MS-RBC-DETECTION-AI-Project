@@ -25,10 +25,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, onMounted } from 'vue';
+import { defineProps, defineEmits, ref, onMounted, PropType } from 'vue';
 import { useCreateUser } from '@/composables/useCreateUser';
 import { useUpdateUser } from '@/composables/useUpdateUser';
 import { useFetchUsers } from '@/composables/useFetchUsers';
+import { type User } from '@/services/api';
 
 const email = ref('email');
 const username = ref('username');
@@ -40,14 +41,14 @@ const { fetchUsers, users, fetchUserError } = useFetchUsers();
 const errorMessage = ref<string | null>(null);
 
 const props = defineProps({
-    editMode: {
-        type: Boolean,
-        default: null,
-    },
-    user: {
-        type: Object,
-        default: null,
-    },
+  editMode: {
+    type: Boolean,
+    default: null,
+  },
+  user: {
+    type: Object as PropType<User | null>,
+    default: null,
+  },
 });
 
 const resetForm = () => {
@@ -74,7 +75,7 @@ const handleSubmit = async () => {
         return;
     }
 
-    if (props.editMode) {
+    if (props.editMode && props.user) {
         // Check for duplicates excluding the current user
         for (const user of users.value) {
             if (user.id !== props.user.id) {
@@ -144,7 +145,7 @@ const showErrorLabel = (message: any) => {
 }
 
 onMounted(() => {
-    if (props.editMode) {
+    if (props.editMode && props.user) {
         email.value = props.user.email;
         username.value = props.user.username;
         password.value = props.user.passwd;

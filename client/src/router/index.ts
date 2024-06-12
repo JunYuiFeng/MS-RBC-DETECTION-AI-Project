@@ -64,7 +64,7 @@ const router = createRouter({
   routes,
 });
 
-// Define the beforeEach navigation guard
+// Routes Guard
 router.beforeEach((to, from, next) => {
   const role = store.getters.getRole;
 

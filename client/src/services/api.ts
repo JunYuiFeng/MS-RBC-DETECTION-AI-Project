@@ -2,9 +2,9 @@ import { ILoginRequest } from "@/config/interfaces";
 import store from "@/store";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-// Define the API base URL (replace with your actual URL)
 const API_URL = "http://127.0.0.1:5000";
 
+// INTERFACES
 export interface PredictionResponse {
   deformedCellsDetected: number;
   healthyCellsDetected: number;
@@ -44,6 +44,7 @@ export interface CreateUserData {
   username: string;
   passwd: string;
 }
+// -----------------
 
 export default class ApiClient {
   static async predict(image: File): Promise<PredictionResponse> {
@@ -113,9 +114,9 @@ export default class ApiClient {
     }
   }
 
-  static async fetchUsers(): Promise<any> {
+  static async fetchUsers(): Promise<{users: UserResponse[]}> {
     try {
-      const response: AxiosResponse<any> = await axios.get(
+      const response: AxiosResponse<{users: UserResponse[]}> = await axios.get(
         `${API_URL}/users/`,
         {
           headers: {

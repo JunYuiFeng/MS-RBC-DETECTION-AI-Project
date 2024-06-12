@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { onMounted, defineProps, ref } from 'vue';
-import { Chart, registerables } from 'chart.js';
+import { Chart, ChartTypeRegistry, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import CellStatistics from '/src/components/CellStatistics.vue';
 import { ComparisonResponse } from '@/services/api';
@@ -69,7 +69,7 @@ const calculatePercentageDifferences = () => {
 };
 
 // Function to create a chart
-const createChart = (elementId: string, type: string, data: any, options: any) => {
+const createChart = (elementId: string, type: keyof ChartTypeRegistry, data: any, options: any) => {
     const ctx = document.getElementById(elementId) as HTMLCanvasElement;
     new Chart(ctx, {
         type,
@@ -100,10 +100,10 @@ const updateCharts = () => {
     const configPie = {
         plugins: {
             datalabels: {
-                formatter: (value, context) => {
+                formatter: (value: any, context: any) => {
                     let sum = 0;
                     const dataArr = context.chart.data.datasets[0].data;
-                    dataArr.forEach((data) => {
+                    dataArr.forEach((data: any) => {
                         sum += data;
                     });
                     const percentage = ((value * 100) / sum).toFixed(2) + '%';
