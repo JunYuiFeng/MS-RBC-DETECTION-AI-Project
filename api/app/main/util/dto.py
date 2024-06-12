@@ -22,7 +22,9 @@ class user_dto:
     user_create_schema =  api.model('user_create', common) 
     user_mod_schema =  api.model('user_mod', {
         'id': fields.Integer(required=True, description='id cannot be blank on modification of a user'),
-        **common
+        'username': fields.String(required=True, description='usename cannot be blank on modification of a user'),
+        'email': fields.String(required=True, description='email cannot be blank on modification of a user'),
+        'passwd': fields.String(required=False, description='password cannot be blank on modification of a user'),
     }) 
     user_full_schema =  api.model('user', {
         'id': fields.Integer(required=True, description='id cannot be blank on modification of a user'),

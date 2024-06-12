@@ -64,7 +64,7 @@ const validateEmail = (email: string) => {
 
 
 const handleSubmit = async () => {
-    if (!email.value || !username.value || !password.value) {
+    if (!email.value || !username.value) {
         showErrorLabel('Please fill in all fields');
         return;
     }
@@ -106,7 +106,10 @@ const handleSubmit = async () => {
             showErrorLabel(updateUserError.value);
         }
     } else {
-
+        if (!password.value) {
+        showErrorLabel('Please fill in all fields');
+        return;
+    }
         for (const user of users.value) {
             if (user.email === email.value) {
                 showErrorLabel('Email already exists');

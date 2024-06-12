@@ -25,8 +25,6 @@ class user_service(Resource):
   @staticmethod
   def create_user(username: str, email: str, passwd: str, type):
     hashed_password = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
-
-    # Insert the user into the database with the hashed password
     res = query_db(
         "INSERT INTO users (username, email, passwd, role) VALUES (?, ?, ?, ?)",
         [username, email, hashed_password.decode('utf-8'), type],
@@ -37,7 +35,11 @@ class user_service(Resource):
      
   @staticmethod
   def modify_user(id: int, username: str, email: str, passwd: str):
-    res = query_db("UPDATE users SET username = ?, email = ?, passwd = ? WHERE id = ?", [username, email, passwd, id], mod=True)
+    if(passwd):
+      hashed_password = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
+      res = query_db("UPDATE users SET username = ?, email = ?, passwd = ? WHERE id = ?", [username, email, hashed_password.decode('utf-8'), id], mod=True)
+    else:
+      res = query_db("UPDATE users SET username = ?, email = ? WHERE id = ?", [username, email, id], mod=True)
     return res
     
   @staticmethod
