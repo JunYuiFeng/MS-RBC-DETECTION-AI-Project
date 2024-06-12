@@ -29,7 +29,7 @@
                 <div class="col-span-4 pt-10 ">
                     <div class="text-lg font-bold flex justify-start mb-4">Insights</div>
                     <ul>
-                        <li class="flex justify-start text-xs mb-4 font-bold"> &#8226; Sample A contains {{ deformedCellsPercentageDifference
+                        <li class="flex justify-start text-xs mb-4 font-bold"> &#8226; Sample B contains {{ deformedCellsPercentageDifference
                             }}% more deformed cells</li>
                         <li class="flex justify-start text-xs font-bold">&#8226; Sample B contains {{ healthyCellsPercentageDifference }}%
                             less healthy cells</li>

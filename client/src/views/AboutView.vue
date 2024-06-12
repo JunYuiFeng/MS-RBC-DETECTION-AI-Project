@@ -1,7 +1,6 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <p>Application created by</p>
+  <div class="about text-white mt-20">
+    <h1>Application created by</h1>
     <p>Jason Xie</p>
     <p>Jun Feng</p>
     <p>Sahib Zulfigar</p>

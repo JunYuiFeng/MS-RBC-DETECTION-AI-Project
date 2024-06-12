@@ -17,12 +17,12 @@
                     <tr v-for="(user, index) in users" :key="index">
                         <td class="p-3">{{ user.email }}</td>
                         <td class="p-3">{{ user.username }}</td>
-                        <td class="p-3">{{ user.passwd }}</td>
+                        <td class="p-3">●●●●●●●</td>
                         <td class="flex justify-end gap-5 pt-3 pb-3">
-                            <button @click="openEditModal(user)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-indigo-950 text-sm rounded-xl">
+                            <button @click="openEditModal(user)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 text-sm rounded-xl">
                                 Edit User
                             </button>
-                            <button @click="handleDeleteUser(user.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-red-600 text-sm rounded-xl">
+                            <button v-if="user.role != 'ADMIN'" @click="handleDeleteUser(user.id)" class="hover:bg-blue-700 text-white font-bold py-2 px-4 bg-red-600 text-sm rounded-xl">
                                 Delete User
                             </button>
                         </td>

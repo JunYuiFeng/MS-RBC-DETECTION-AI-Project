@@ -8,7 +8,7 @@ class user_service(Resource):
   
   @staticmethod
   def get_all():
-    users = query_db("SELECT id, username, email, passwd, role FROM users")
+    users = query_db("SELECT id, username, email, role FROM users")
     return users;
   
   @staticmethod

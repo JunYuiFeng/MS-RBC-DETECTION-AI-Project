@@ -12,7 +12,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Password:</label>
-                    <input v-model="password" type="text" class="w-full px-3 py-2 border rounded" required/>
+                    <input v-model="password" type="password" class="w-full px-3 py-2 border rounded" required/>
                 </div>
                 <div v-if="errorMessage" id="errorLabel" class="border border-red-400 rounded bg-red-100 px-4 py-3 mb-5 text-red-700 fade">{{ errorMessage }}</div>    
                 <div class="flex justify-end gap-4">
