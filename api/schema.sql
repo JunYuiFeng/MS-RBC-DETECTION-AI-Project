@@ -9,4 +9,4 @@ CREATE TABLE users (
     UNIQUE(id, username, email)
 );
 
-INSERT INTO users (username, email, passwd, role) VALUES ("admin", "admin@gmail.com", "passwd", "ADMIN")
+INSERT INTO users (username, email, passwd, role) VALUES ("admin", "admin@gmail.com", "$2a$12$3/oG4v.IVeUC89oRJqKjzOSrzlQHh4j8tb3prnAO66Us/N6skzD.m", "ADMIN")

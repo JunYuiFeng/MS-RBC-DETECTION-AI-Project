@@ -1,3 +1,4 @@
+import bcrypt
 from db import query_db
 from flask_restx import Resource
 import logging
@@ -23,7 +24,14 @@ class user_service(Resource):
     
   @staticmethod
   def create_user(username: str, email: str, passwd: str, type):
-    res = query_db("INSERT INTO users (username, email, passwd, role ) VALUES (?, ?, ?, ?)", [username, email, passwd, type], mod=True)
+    hashed_password = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
+
+    # Insert the user into the database with the hashed password
+    res = query_db(
+        "INSERT INTO users (username, email, passwd, role) VALUES (?, ?, ?, ?)",
+        [username, email, hashed_password.decode('utf-8'), type],
+        mod=True
+    )
     return res
     
      
