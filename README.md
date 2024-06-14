@@ -20,6 +20,10 @@ This repository contains both the back-end and front-end of the MS RBC Detection
 > ```
 
 ## Setup backend
+#### Go to client folder
+> ```console
+> foo@bar:~$ cd client
+> ```
 
 #### Create a virtual env
 > ##### For MacOSX:
