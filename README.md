@@ -5,17 +5,17 @@ This repository contains both the back-end and front-end of the MS RBC Detection
 ## Setup forntend
 
 #### Go to client folder
-> ```
+> ```console
 > foo@bar:~$ cd client
 > ```
 
 #### Install packages
-> ```
+> ```console
 > foo@bar:~$ npm install
 > ```
 
 #### Start local server
-> ```
+> ```console
 > foo@bar:~$ npm run serve
 > ```
 
