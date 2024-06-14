@@ -28,7 +28,7 @@ This repository contains both the back-end and front-end of the MS RBC Detection
 #### Create a virtual env
 > ##### For MacOSX:
 > ```console
-> foo@bar:~$ virtualenv -p python3 .venv
+> foo@bar:~$ python3.9 -m venv .venv
 > ```
 
 ##### For windows:
