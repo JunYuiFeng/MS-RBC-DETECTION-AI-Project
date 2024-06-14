@@ -10,11 +10,47 @@ Don't forget to run
 5. `cd api` to go to api folder.
 
 
+## Setup backend
+
+#### Create a virtual env
+```console
+foo@bar:~$ virtualenv -p python3 .venv
+```
+
+#### Activate virtual environment in python.<br>
+> ##### For windows:
+> ```console
+> foo@bar:~$ .venv\Scripts\activate
+> ```
+
+> ##### For Unix/POSIX/Linux:
+> ```console
+> foo@bar:~$ source .venv/bin/activate
+> ```
+
+#### Install requirements
+> ```console
+> foo@bar:~$ pip install -r requirements.txt
+> ```
+> or:
+> ```console
+> foo@bar:~$ python -m pip install -r requirements.txt
+> ```
 
 
+#### Set Flask ENV
+> ##### For windows:
+> ```console
+> foo@bar:~$ set FLASK_APP=manage.py
+> ```
 
-TODO finish steps
-6. `virtualenv -p python3 venv` create venv.
-7. activate virtual environment in python.
-8. set flask
-9. flask run
+> ##### For Unix/POSIX/Linux:<br>
+> ```console
+> foo@bar:~$ export FLASK_APP=manage.py
+> ```
+
+## To run the backend
+flask run <br>
+```console
+foo@bar:~$ python -m flask run
+```
