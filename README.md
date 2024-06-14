@@ -19,12 +19,12 @@ Don't forget to run
 > ```
 
 ##### For windows:
-> ```
+> ```console
 > foo@bar:~$ python -m venv .venv
 > ```
 
 ##### For Unix/POSIX/Linux:
-> ```
+> ```console
 > foo@bar:~$ python3.9 -m virtualenv .venv
 > ```
 
