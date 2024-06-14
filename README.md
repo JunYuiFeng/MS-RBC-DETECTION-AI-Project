@@ -13,9 +13,20 @@ Don't forget to run
 ## Setup backend
 
 #### Create a virtual env
-```console
-foo@bar:~$ virtualenv -p python3 .venv
-```
+> ##### For MacOSX:
+> ```console
+> foo@bar:~$ virtualenv -p python3 .venv
+> ```
+
+##### For windows:
+> ```
+> foo@bar:~$ python -m venv .venv
+> ```
+
+##### For Unix/POSIX/Linux:
+> ```
+> foo@bar:~$ python3.9 -m virtualenv .venv
+> ```
 
 #### Activate virtual environment in python.<br>
 > ##### For windows:
