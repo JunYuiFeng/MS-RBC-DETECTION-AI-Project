@@ -3,12 +3,22 @@
 This repository contains both the back-end and front-end of the MS RBC Detection AI Dashboard.
 Don't forget to run 
 
-1. `cd client` to go to client folder.
-2. `npm install` from within the /client folder.
-3. `npm run serve` to start the frontend on local server.
-4. open new terminal.
-5. `cd api` to go to api folder.
+## Setup forntend
 
+#### Go to client folder
+> ```
+> foo@bar:~$ cd client
+> ```
+
+#### Install packages
+> ```
+> foo@bar:~$ npm install
+> ```
+
+#### Start local server
+> ```
+> foo@bar:~$ npm run serve
+> ```
 
 ## Setup backend
 
