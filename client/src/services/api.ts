@@ -8,7 +8,7 @@ const API_URL = "http://127.0.0.1:5000";
 export interface PredictionResponse {
   deformedCellsDetected: number;
   healthyCellsDetected: number;
-  annotatedImage: string;
+  annotatedImages: string[];
 }
 
 export interface MultiplePredictionResponse extends Omit<PredictionResponse, 'annotatedImage'> {
@@ -47,9 +47,11 @@ export interface CreateUserData {
 // -----------------
 
 export default class ApiClient {
-  static async predict(image: File): Promise<PredictionResponse> {
+  static async predict(images: File[]): Promise<PredictionResponse> {
     const formData = new FormData();
-    formData.append('image', image);
+    images.forEach((image, index) => {
+      formData.append(`images`, image, image.name);
+    });
 
     try {
       const response: AxiosResponse<PredictionResponse> = await axios.post(
@@ -64,7 +66,7 @@ export default class ApiClient {
       );
       return response.data;
     } catch (error) {
-      throw new Error('Error predicting image: ' + (error as AxiosError).message);
+      throw new Error('Error predicting images: ' + (error as AxiosError).message);
     }
   }
 

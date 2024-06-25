@@ -2,13 +2,8 @@
   <div class="grid grid-cols-12 gap-5">
     <!-- Conditional rendering of carousel or single image -->
     <div class="col-span-5">
-      <div v-if="props.comparedResultsPage">
         <CarouselComponent v-if="props.predictions.annotatedImages" :images="props.predictions.annotatedImages" />
         <img v-else :src="`data:image/jpg;base64,${props.predictions.annotatedImage}`" alt="blood smear example" class="rounded-lg w-full" />
-      </div>
-      <div v-else>
-        <img :src="`data:image/jpg;base64,${props.predictions.annotatedImage}`" alt="blood smear example" class="rounded-lg w-full" />
-      </div>
     </div>
 
     <div

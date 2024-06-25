@@ -9,7 +9,7 @@
       </div>
       <div>
         <div class="flex items-center gap-5 justify-center w-full">
-          <DropFile :multiple="false" @fileSelected="handleSelectedFile" />
+          <DropFile :multiple="true" @fileSelected="handleSelectedFile" />
         </div>
       </div>
       <div v-if="error" class="text-red-500 mt-3">{{ error }}</div>
@@ -26,16 +26,15 @@ import RBCResults from "/src/components/RBCResults.vue";
 import usePredict from "@/composables/usePredict";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
-const { prediction, isLoading, error, predictImage, hasPrediction } =
-  usePredict();
+const { prediction, isLoading, error, predictImages, hasPrediction } = usePredict();
 
 const handleSelectedFile = (files: FileList | null) => {
   if (files && files.length > 0) {
-    const imageFile = files[0];
-    predictImage(imageFile);
+    const imageFiles = Array.from(files); // Convert FileList to an array of files
+    predictImages(imageFiles); // Pass the array to predictImages
   }
 };
-
 </script>
+
 
 <style scoped></style>
