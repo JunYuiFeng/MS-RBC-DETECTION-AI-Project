@@ -20,7 +20,7 @@
       <div>
         <div class="flex justify-start"><b>Total Cells Detected</b></div>
         <div class="flex justify-start font-black">
-          {{ props.predictions.healthyCellsDetected + props.predictions.deformedCellsDetected }}
+          {{ TotalCellsDetected }}
         </div>
       </div>
 
@@ -41,16 +41,17 @@
       <div>
         <div class="flex justify-start"><b>Healthy Cells Percentage</b></div>
         <div class="flex justify-start font-black text-green-600">
-          {{ Math.round((props.predictions.healthyCellsDetected * 100) / (props.predictions.deformedCellsDetected + props.predictions.healthyCellsDetected)) }}%
+          {{ HealthyCellsPercentage }}%
         </div>
       </div>
 
       <div>
         <div class="flex justify-start"><b>Deformed Cells Percentage</b></div>
         <div class="flex justify-start font-black text-violet-700">
-          {{ Math.round((props.predictions.deformedCellsDetected * 100) / (props.predictions.deformedCellsDetected + props.predictions.healthyCellsDetected)) }}%
+          {{ DeformedCellsPercentage }}%
         </div>
       </div>
+      <h1 class="flex justify-start">{{ closestNumber(DeformedCellsPercentage) }}</h1>
     </div>
   </div>
 </template>
@@ -59,10 +60,38 @@
 import { defineProps } from "vue";
 import CarouselComponent from './CarouselComponent.vue'; // Ensure you have this component imported
 
+const HealthyAVGDeformedPercentage = 15.8; // Derived from analysis of the dataset
+const MSAVGDeformedPercentage = 24.6; // Derived from analysis of the dataset
+
 const props = defineProps<{
   predictions: any;
   comparedResultsPage: boolean;
 }>();
+
+const TotalCellsDetected = props.predictions.healthyCellsDetected + props.predictions.deformedCellsDetected;
+
+const HealthyCellsPercentage = Math.round((props.predictions.healthyCellsDetected * 100) / TotalCellsDetected);
+
+const DeformedCellsPercentage = Math.round((props.predictions.deformedCellsDetected * 100) / TotalCellsDetected);
+
+const closestNumber = (target: number): string => {
+    const diff1 = Math.abs(target - HealthyAVGDeformedPercentage);
+    const diff2 = Math.abs(target - MSAVGDeformedPercentage);
+
+    if (diff1 > diff2) {
+        return "*Potentially MS*";
+    }
+    return "";
+};
+
+
 </script>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: orange;
+}
+</style>
