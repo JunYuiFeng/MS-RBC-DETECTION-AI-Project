@@ -15,7 +15,7 @@
       <div>
         <div class="flex justify-start"><b>Total Cells Detected</b></div>
         <div class="flex justify-start font-black">
-          {{ TotalCellsDetected }}
+          {{ props.predictions.totalCellsDetected }}
         </div>
       </div>
 
@@ -63,11 +63,9 @@ const props = defineProps<{
   comparedResultsPage: boolean;
 }>();
 
-const TotalCellsDetected = props.predictions.healthyCellsDetected + props.predictions.deformedCellsDetected;
+const HealthyCellsPercentage = Math.round((props.predictions.healthyCellsDetected * 100) / props.predictions.totalCellsDetected);
 
-const HealthyCellsPercentage = Math.round((props.predictions.healthyCellsDetected * 100) / TotalCellsDetected);
-
-const DeformedCellsPercentage = Math.round((props.predictions.deformedCellsDetected * 100) / TotalCellsDetected);
+const DeformedCellsPercentage = Math.round((props.predictions.deformedCellsDetected * 100) / props.predictions.totalCellsDetected);
 
 const closestNumber = (target: number): string => {
     const diff1 = Math.abs(target - HealthyAVGDeformedPercentage);
@@ -78,7 +76,6 @@ const closestNumber = (target: number): string => {
     }
     return "";
 };
-
 
 </script>
 

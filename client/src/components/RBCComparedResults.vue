@@ -29,10 +29,7 @@
                 <div class="col-span-4 pt-10 ">
                     <div class="text-lg font-bold flex justify-start mb-4">Insights</div>
                     <ul>
-                        <li class="flex justify-start text-xs mb-4 font-bold"> &#8226; Sample B contains {{ deformedCellsPercentageDifference
-                            }}% more deformed cells</li>
-                        <li class="flex justify-start text-xs font-bold">&#8226; Sample B contains {{ healthyCellsPercentageDifference }}%
-                            less healthy cells</li>
+                        <li class="flex justify-start text-xs mb-4 font-bold"> &#8226;{{ insight }}</li>
                     </ul>
                 </div>
             </div>
@@ -41,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, defineProps, ref } from 'vue';
+import { onMounted, defineProps, ref, toRefs } from 'vue';
 import { Chart, ChartTypeRegistry, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import CellStatistics from '/src/components/CellStatistics.vue';
@@ -54,18 +51,26 @@ const props = defineProps<{
 // Register Chart.js and the plugin
 Chart.register(...registerables, ChartDataLabels);
 
-const deformedCellsPercentageDifference = ref(0);
-const healthyCellsPercentageDifference = ref(0);
+const { comparisons } = toRefs(props);
+const { patient1, patient2 } = comparisons.value;
+
+const patient1HealthyCellsPercentage = Math.round((patient1.healthyCellsDetected * 100) / patient1.totalCellsDetected);
+const patient1DeformedCellsPercentage = Math.round((patient1.deformedCellsDetected * 100) / patient1.totalCellsDetected);
+
+const patient2HealthyCellsPercentage = Math.round((patient2.healthyCellsDetected * 100) / patient2.totalCellsDetected);
+const patient2DeformedCellsPercentage = Math.round((patient2.deformedCellsDetected * 100) / patient2.totalCellsDetected);
+
+const insight = ref('');
 
 // Function to calculate the percentage differences
-const calculatePercentageDifferences = () => {
-    const { patient1, patient2 } = props.comparisons;
+const generateInsight = () => {
+    const result = Math.abs(patient1DeformedCellsPercentage - patient2DeformedCellsPercentage);
 
-    const totalCellsA = patient1.deformedCellsDetected + patient1.healthyCellsDetected;
-    const totalCellsB = patient2.deformedCellsDetected + patient2.healthyCellsDetected;
-
-    deformedCellsPercentageDifference.value = Math.abs(Math.round(((patient1.deformedCellsDetected - patient2.deformedCellsDetected) / totalCellsA) * 100));
-    healthyCellsPercentageDifference.value = Math.abs(Math.round(((patient1.healthyCellsDetected - patient2.healthyCellsDetected) / totalCellsB) * 100));
+    if (patient1DeformedCellsPercentage > patient2DeformedCellsPercentage) {
+        insight.value = `Sample B has ${result}% fewer deformed cells than Sample A`;
+    } else {
+        insight.value = `Sample B has ${result}% more deformed cells than Sample A`;
+    }
 };
 
 // Function to create a chart
@@ -80,7 +85,7 @@ const createChart = (elementId: string, type: keyof ChartTypeRegistry, data: any
 
 // Function to update charts
 const updateCharts = () => {
-    calculatePercentageDifferences();
+    generateInsight();
 
     // Data for the pie chart
     const dataPie = {
@@ -88,8 +93,8 @@ const updateCharts = () => {
         datasets: [
             {
                 data: [
-                    props.comparisons.patient1.deformedCellsDetected,
-                    props.comparisons.patient2.deformedCellsDetected,
+                    patient1DeformedCellsPercentage,
+                    patient2DeformedCellsPercentage,
                 ],
                 backgroundColor: ["rgb(156,68,68)", "rgb(56,60,148)"],
                 hoverOffset: 4,
@@ -121,8 +126,8 @@ const updateCharts = () => {
             {
                 label: 'Sample A',
                 data: [
-                    props.comparisons.patient1.deformedCellsDetected,
-                    props.comparisons.patient1.healthyCellsDetected,
+                    patient1DeformedCellsPercentage,
+                    patient1HealthyCellsPercentage,
                 ],
                 backgroundColor: "rgb(156,68,68)",
                 hoverOffset: 4,
@@ -130,8 +135,8 @@ const updateCharts = () => {
             {
                 label: 'Sample B',
                 data: [
-                    props.comparisons.patient2.deformedCellsDetected,
-                    props.comparisons.patient2.healthyCellsDetected,
+                    patient2DeformedCellsPercentage,
+                    patient2HealthyCellsPercentage,
                 ],
                 backgroundColor: "rgb(56,60,148)",
                 hoverOffset: 4,
@@ -160,7 +165,6 @@ onMounted(() => {
     updateCharts();
 });
 
-//   watch(() => props.comparisons, updateCharts, { deep: true });
 </script>
 
 <style scoped></style>
