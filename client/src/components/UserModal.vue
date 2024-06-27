@@ -51,19 +51,20 @@ const props = defineProps({
   },
 });
 
+// Reset form fields
 const resetForm = () => {
     email.value = '';
     username.value = '';
     password.value = '';
 };
 
-
+// Check if email is valid
 const validateEmail = (email: string) => {
     const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
     return isValid;
 };
 
-
+// Handle form submission
 const handleSubmit = async () => {
     if (!email.value || !username.value) {
         showErrorLabel('Please fill in all fields');
@@ -75,6 +76,7 @@ const handleSubmit = async () => {
         return;
     }
 
+    // Check if in edit mode and user exists
     if (props.editMode && props.user) {
         // Check for duplicates excluding the current user
         for (const user of users.value) {
@@ -106,11 +108,13 @@ const handleSubmit = async () => {
         } else {
             showErrorLabel(updateUserError.value);
         }
-    } else {
+    } else { // if not in edit mode then create user
         if (!password.value) {
-        showErrorLabel('Please fill in all fields');
-        return;
-    }
+            showErrorLabel('Please fill in all fields');
+            return;
+        }
+
+        // Check for duplicates
         for (const user of users.value) {
             if (user.email === email.value) {
                 showErrorLabel('Email already exists');
@@ -145,11 +149,12 @@ const showErrorLabel = (message: any) => {
 }
 
 onMounted(() => {
+    // If in edit mode, populate form fields with user data
     if (props.editMode && props.user) {
         email.value = props.user.email;
         username.value = props.user.username;
         password.value = props.user.passwd;
-    } else {
+    } else { // else keep fields empty
         resetForm();
     }
 

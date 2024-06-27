@@ -8,6 +8,7 @@ const { login, isLoading, error } = useLogin();
 const email = ref("");
 const password = ref("");
 
+// Login button click event
 function onSignInBtnClick() {
   login(email.value, password.value);
 }

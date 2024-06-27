@@ -54,6 +54,7 @@ const successMessage = ref<string | null>(null);
 const { fetchUsers, users, fetchUserError } = useFetchUsers();
 const { deleteUser, deleteUserError } = useDeleteUser();
 
+// Handle delete user
 const handleDeleteUser = async (id: number) => {
     await deleteUser(id);
 
@@ -65,21 +66,25 @@ const handleDeleteUser = async (id: number) => {
     }
 }
 
+// Open create modal
 const openCreateModal = () => {
     selectedUser.value = null;
     showCreateModal.value = true;
 }
 
+// Open edit modal
 const openEditModal = (user: User) => {
     selectedUser.value = user;
     showEditModal.value = true;
 }
 
+// Close modal
 const closeModal = () => {
     showCreateModal.value = false;
     showEditModal.value = false;
 }
 
+// Close model and show message label
 const handleConfirm = async () => {
     await fetchUsers();
 
@@ -96,6 +101,7 @@ const handleConfirm = async () => {
     closeModal();
 }
 
+// Show message label
 const showMessageLabel = (message: string) => {
     successMessage.value = message;
     errorMessage.value = null;
@@ -105,6 +111,7 @@ const showMessageLabel = (message: string) => {
     }, 2000);
 }
 
+// Show error label
 const showErrorLabel = (message: string) => {
     errorMessage.value = message;
     successMessage.value = null;
@@ -123,6 +130,7 @@ onMounted(async () => {
 });
 </script>
 
+<!-- Fade effects for labels -->
 <style scoped> 
 tr {
     border-bottom: 1px solid #ddd;

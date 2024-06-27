@@ -64,6 +64,7 @@ const emit = defineEmits<{
 
 const fileCount = ref(0);
 
+// File input change event
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const files = target.files;
@@ -75,6 +76,7 @@ const handleFileChange = (event: Event) => {
   }
 };
 
+// Drag and drop events
 const handleDragOver = (event: DragEvent) => {
   event.preventDefault();
 };

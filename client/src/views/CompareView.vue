@@ -41,6 +41,7 @@ const patient2 = ref<File[] | null>(null)
 
 const { comparison, isLoading, error, predictMultipleAndCompare, hasComparison } = usePredictMultipleAndCompare();
 
+// Put files into array
 const handlePatient1SelectedFiles = (files: FileList | null) => {
   if (files && files.length > 0) {
    patient1.value = Array.from(files);
@@ -52,6 +53,7 @@ const handlePatient2SelectedFiles = (files: FileList | null) => {
   }
 };
 
+// Compare the two patients
 const detect = async () => {
   if (!patient1.value || !patient2.value) return;
   await predictMultipleAndCompare(patient1.value, patient2.value);

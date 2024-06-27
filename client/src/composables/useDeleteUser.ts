@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import ApiClient from "@/services/api";
+import ApiService from "@/services/api";
 
 export function useDeleteUser() {
   const deleteUserError = ref<string | null>(null);
@@ -8,7 +8,7 @@ export function useDeleteUser() {
     deleteUserError.value = null;
 
     try {
-      await ApiClient.deleteUser(id);
+      await ApiService.deleteUser(id);
     } catch (err: any) {
       deleteUserError.value = err.message;
     } 

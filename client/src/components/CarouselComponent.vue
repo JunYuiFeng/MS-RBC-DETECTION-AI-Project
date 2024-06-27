@@ -66,6 +66,7 @@
   
   const currentIndex = ref(0);
   
+  // Control the carousel
   const prevImage = () => {
     currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
   };

@@ -28,6 +28,7 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 const { prediction, isLoading, error, predictImages, hasPrediction } = usePredict();
 
+// Put files into array and predict
 const handleSelectedFile = (files: FileList | null) => {
   if (files && files.length > 0) {
     const imageFiles = Array.from(files); // Convert FileList to an array of files

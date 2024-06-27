@@ -1,12 +1,5 @@
 import { ref } from 'vue';
-import ApiService from '@/services/api';
-
-interface User {
-    id: number;
-    email: string;
-    username: string;
-    passwd: string;
-}
+import ApiService, { User } from '@/services/api';
 
 export function useUpdateUser() {
     const updateUserError = ref<string | null>(null);
@@ -15,11 +8,8 @@ export function useUpdateUser() {
         updateUserError.value = null;
 
         const response = await ApiService.updateUser(user);
-        // console.log(response.data);
         
-        if (response.status !== 200) {
-            // console.log(response.data);
-            
+        if (response.status !== 200) {       
             updateUserError.value = response.data.error;
             console.log(updateUserError.value);
             

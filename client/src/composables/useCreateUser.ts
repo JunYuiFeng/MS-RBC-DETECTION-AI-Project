@@ -1,11 +1,5 @@
 import { ref } from 'vue';
-import ApiService from '@/services/api';
-
-interface CreateUserData {
-    email: string;
-    username: string;
-    passwd: string;
-}
+import ApiService, { CreateUserData } from '@/services/api';
 
 export function useCreateUser() {
   const createUserError = ref<string | null>(null);

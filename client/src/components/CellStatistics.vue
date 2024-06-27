@@ -67,6 +67,7 @@ const HealthyCellsPercentage = Math.round((props.predictions.healthyCellsDetecte
 
 const DeformedCellsPercentage = Math.round((props.predictions.deformedCellsDetected * 100) / props.predictions.totalCellsDetected);
 
+// Function to determine if target number is closer to Healthy or MS average
 const closestNumber = (target: number): string => {
     const diff1 = Math.abs(target - HealthyAVGDeformedPercentage);
     const diff2 = Math.abs(target - MSAVGDeformedPercentage);
