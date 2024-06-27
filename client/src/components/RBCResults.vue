@@ -93,7 +93,6 @@ const configBar = {
   scales: {
     y: {
       beginAtZero: true,
-      max: 500,
     },
   },
   plugins: {
