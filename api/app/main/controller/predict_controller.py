@@ -10,6 +10,7 @@ from ..util.dto import predict_dto
 from PIL import Image
 import io
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 
 api = predict_dto.api
@@ -79,8 +80,11 @@ class Predict(Resource):
                 logging.error(f'Error processing file {file.filename}: {e}')
                 continue
 
+        total_cells_detected = deformed_cells_total + healthy_cells_total
+
         return {
             'deformedCellsDetected': deformed_cells_total,
             'healthyCellsDetected': healthy_cells_total,
+            'totalCellsDetected': total_cells_detected,
             'annotatedImages': annotated_images
         }
