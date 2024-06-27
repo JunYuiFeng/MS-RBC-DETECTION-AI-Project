@@ -10,6 +10,7 @@ from ..util.dto import comparepredict_dto
 from PIL import Image
 import io
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 
 compare_api = comparepredict_dto.api
@@ -80,15 +81,19 @@ class Compare(Resource):
                 if len(counts) > 1:
                     healthy_cells_total += int(counts[1])
 
+        total_cells_detected = deformed_cells_total + healthy_cells_total
+
         return {
             'deformedCellsDetected': deformed_cells_total,
             'healthyCellsDetected': healthy_cells_total,
+            'totalCellsDetected': total_cells_detected,
             'annotatedImages': annotated_images
         }
 
     def compare_results(self, results1, results2):
         comparison = {
             'deformedCellsDifference': results1['deformedCellsDetected'] - results2['deformedCellsDetected'],
-            'healthyCellsDifference': results1['healthyCellsDetected'] - results2['healthyCellsDetected']
+            'healthyCellsDifference': results1['healthyCellsDetected'] - results2['healthyCellsDetected'],
+            'totalCellsDifference': results1['totalCellsDetected'] - results2['totalCellsDetected']
         }
         return comparison
