@@ -20,7 +20,7 @@
       </div>
 
       <div>
-        <div class="flex justify-start"><b>Healthy</b></div>
+        <div class="flex justify-start"><b>Healthy Cells</b></div>
         <div class="flex justify-start font-black text-green-600">
           {{ props.predictions.healthyCellsDetected }}
         </div>
