@@ -5,6 +5,7 @@ from db import query_db
 from flask_restx import Resource, marshal
 from flask import current_app
 import jwt
+import datetime
 from ..util.dto import auth_dto
 
 class auth_service(Resource):
@@ -24,7 +25,10 @@ class auth_service(Resource):
         if bcrypt.checkpw(passwd.encode('utf-8'), res['passwd'].encode('utf-8')):
             try:
                 token = jwt.encode(
-                    {"id": res['id']},
+                    {"id": res['id'],
+                     "username": res['username'],
+                     'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)  # Token expires in 1 day
+                    },
                     current_app.config["SECRET_KEY"],
                     algorithm="HS256"
                 )
