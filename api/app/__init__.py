@@ -7,6 +7,8 @@ from .main.controller.auth_controller import api as auth_ns
 from .main.controller.users_controller import api as users_ns
 from .main.controller.user_controller import api as user_ns
 
+
+# create API bluepring
 blueprint = Blueprint('api', __name__)
 authorizations = {
   'jsonWebToken': {
@@ -25,6 +27,8 @@ api = Api(
   security='apikey'
 )
 
+
+#namespaces for different controllers
 api.add_namespace(predict_ns, path='/predict')
 api.add_namespace(compare_ns, path='/compare')
 api.add_namespace(auth_ns, path='/auth')

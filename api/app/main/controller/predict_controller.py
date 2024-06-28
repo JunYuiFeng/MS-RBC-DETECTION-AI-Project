@@ -47,6 +47,7 @@ class Predict(Resource):
         healthy_cells_total = 0
         annotated_images = []
 
+        #apply general pre-processing to images for model input
         transform = transforms.Compose([
             transforms.Resize((640, 640)),
             transforms.Lambda(lambda img: img.rotate(-90)),
@@ -61,11 +62,13 @@ class Predict(Resource):
 
                 results = model(image, conf=0.6, max_det=600)
 
+                # create imgs including boundingboxes
                 for result in results:
                     boxes = result.boxes  # Boxes object for bounding box outputs
                     unique, counts = np.unique(boxes.cls.cpu().numpy(), return_counts=True)
                     annotated_image = result.plot(labels=False)  # Get the annotated image as NumPy array
 
+                    # transform annotated numpy array to img with bounding boxes
                     img = Image.fromarray(annotated_image.astype('uint8'))
                     buff = io.BytesIO()
                     img.save(buff, format="JPEG")

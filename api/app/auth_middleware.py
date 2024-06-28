@@ -19,7 +19,7 @@ def jwt_required(role=None):
                 auth_header = request.headers["Authorization"].split()
                 if len(auth_header) == 2 and auth_header[0] == "Bearer":
                     token = auth_header[1]
-
+            # check if token is available
             if not token:
                 return {
                     "message": "No Authentication token provided",
@@ -41,7 +41,7 @@ def jwt_required(role=None):
                         "data": None,
                         "error": "Unauthorized"
                     }, 401  # Unauthorized
-
+                # no expiry date
                 if 'exp' not in jwt_data:
                     return {
                         "message": "No expiry date in token",
@@ -49,6 +49,7 @@ def jwt_required(role=None):
                         "error": "Unauthorized"
                     }, 401  # Unauthorized
 
+                # check valid role
                 user_role = current_user[0]['role']
                 if role and user_role not in [role, "ADMIN"]:
                     return {
@@ -57,6 +58,7 @@ def jwt_required(role=None):
                         "error": "Forbidden"
                     }, 403  # Forbidden
 
+            # time token expiry based on signature
             except jwt.ExpiredSignatureError:
                 return {
                     "message": "Token expired",
@@ -64,13 +66,14 @@ def jwt_required(role=None):
                     "error": "Unauthorized"
                 }, 401  # Unauthorized
 
+            # invalid token segments
             except jwt.InvalidTokenError as e:
                 return {
                     "message": "Invalid token",
                     "data": None,
                     "error": str(e)
                 }, 401  # Unauthorized
-
+            # general exception handling for server errors
             except Exception as e:
                 return {
                     "message": "Server error",

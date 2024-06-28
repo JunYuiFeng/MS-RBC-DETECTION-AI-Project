@@ -7,6 +7,8 @@ from ..service.auth_service import auth_service
 logging.basicConfig(level=logging.DEBUG)
 api = auth_dto.api
 
+
+
 @api.route('/')
 class auth(Resource):
   @api.expect(auth_dto.user_schema)

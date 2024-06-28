@@ -27,6 +27,7 @@ class Compare(Resource):
     })
     @jwt_required()
     def post(self):
+        #check for request files
         if 'patient1_images' not in request.files or 'patient2_images' not in request.files:
             return {'error': 'No images uploaded'}, 400
 
@@ -35,7 +36,8 @@ class Compare(Resource):
 
         if len(patient1_files) == 0 or len(patient2_files) == 0:
             return {'error': 'At least one image for each patient should be uploaded for comparison'}, 400
-
+        
+        # assign processed images to patients
         results_patient_1 = self.process_images(patient1_files)
         results_patient_2 = self.process_images(patient2_files)
 
@@ -52,10 +54,12 @@ class Compare(Resource):
         healthy_cells_total = 0
         annotated_images = []
 
+        
+        #apply general pre-processing to images for model input
         transform = transforms.Compose([
             transforms.Resize((640, 640)),
             transforms.Lambda(lambda img: img.rotate(-90)),
-            transforms.ToTensor(),  # Converts the image to a Tensor
+            transforms.ToTensor(),
         ])
 
         for file in files:
@@ -65,11 +69,13 @@ class Compare(Resource):
 
             results = model(image, conf=0.6, max_det=600)
 
+            # create imgs including boundingboxes
             for result in results:
                 boxes = result.boxes  # Boxes object for bounding box outputs
                 unique, counts = np.unique(boxes.cls.cpu().numpy(), return_counts=True)
                 annotated_image = result.plot(labels=False)  # Get the annotated image as NumPy array
 
+                # transform from array to img
                 img = Image.fromarray(annotated_image.astype('uint8'))
                 buff = io.BytesIO()
                 img.save(buff, format="JPEG")

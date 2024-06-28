@@ -11,9 +11,9 @@ from ..util.dto import users_dto
 
 api = users_dto.api
 
+# get all users, only available for admin role
 @api.route('/')
 class get_all(Resource):
-
     @jwt_required(role="ADMIN")
     @api.marshal_with(users_dto.users_schema, skip_none=True)
     @api.doc(

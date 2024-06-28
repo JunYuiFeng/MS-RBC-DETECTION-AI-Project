@@ -23,9 +23,11 @@ def get_db():
     return db
 
 def init_db():
+    # only goes through if a database.db file does not exist
     if os.path.isfile(DB):
         return None
 
+    # create db based of schema
     with current_app.app_context():
         db = get_db()
         with current_app.open_resource('../../schema.sql', mode='r') as f:
@@ -33,6 +35,7 @@ def init_db():
         db.commit()
 
 
+# general querying of db
 def query_db(query, args=(), bool=False, mod=False):
     db = get_db()
     try:
@@ -51,9 +54,10 @@ def query_db(query, args=(), bool=False, mod=False):
         rv = cur.fetchall()
         if not cols:
             return []
+        # if cols exist, append to object
         result = [dict(zip(cols, row)) for row in rv]
         cur.close()
-        return result
+        return result # returns JSONified result
     except sqlite3.IntegrityError as e:
         logging.error(f"SQLite integrity error: {e}")
         # Parse the error message to determine the field causing the violation
@@ -67,10 +71,3 @@ def query_db(query, args=(), bool=False, mod=False):
     except sqlite3.Error as e:
         logging.error(f"SQLite error: {e}")
         return jsonify({'error': 'Database error'}), 500
-
-
-def to_json(response, cursor):
-    cols = [description[0] for description in cursor.description]
-    result = [dict(zip(cols, row)) for row in response]
-
-    return json.dumps(result, indent=4)
